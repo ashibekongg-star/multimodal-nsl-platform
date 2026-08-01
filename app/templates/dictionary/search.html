@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}
+Search Dictionary
+{% endblock %}
+
+{% block content %}
+
+<h1>Search Dictionary</h1>
+
+<form method="GET">
+
+    <div class="mb-3">
+
+        <input
+            type="text"
+            name="q"
+            class="form-control"
+            placeholder="Search for a sign..."
+            value="{{ query }}">
+
+    </div>
+
+    <button
+        type="submit"
+        class="btn btn-primary">
+
+        Search
+
+    </button>
+
+</form>
+
+{% if query %}
+
+<hr>
+
+<h3>Search Results</h3>
+
+{% if signs %}
+
+    {% for sign in signs %}
+
+    <div class="card mt-3">
+
+        <div class="card-body">
+
+            <h4>
+
+                <a href="{{ url_for('dictionary.sign', sign_id=sign.id) }}">
+
+                    {{ sign.word }}
+
+                </a>
+
+            </h4>
+
+            <p>
+
+                <strong>Category:</strong>
+
+                {{ sign.category.name }}
+
+            </p>
+
+            <p>
+
+                {{ sign.meaning }}
+
+            </p>
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+{% else %}
+
+<div class="alert alert-warning mt-3">
+
+    No signs found for "<strong>{{ query }}</strong>".
+
+</div>
+
+{% endif %}
+
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ category.name }}
+{% endblock %}
+
+{% block content %}
+
+<a href="{{ url_for('dictionary.categories') }}" class="btn btn-secondary mb-4">
+    ← Back to Categories
+</a>
+
+<h1>{{ category.name }}</h1>
+
+<p class="text-muted">
+    {{ category.description }}
+</p>
+
+<div class="row">
+
+{% for sign in signs %}
+
+<div class="col-md-6 mb-3">
+
+    <div class="card shadow-sm">
+
+        <div class="card-body">
+
+            <h4>{{ sign.word }}</h4>
+
+            <p>{{ sign.meaning }}</p>
+
+            <a
+                href="{{ url_for('dictionary.sign', sign_id=sign.id) }}"
+                class="btn btn-primary">
+
+                View Details
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% else %}
+
+<p>No signs available.</p>
+
+{% endfor %}
+
+</div>
+
+{% endblock %}

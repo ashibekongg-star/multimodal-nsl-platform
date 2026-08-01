@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}
+Dictionary
+{% endblock %}
+
+{% block content %}
+
+<h1 class="mb-4">Nigerian Sign Language Dictionary</h1>
+
+<div class="row">
+
+{% for category in categories %}
+
+<div class="col-md-4 mb-4">
+
+    <div class="card h-100 shadow-sm">
+
+        <div class="card-body">
+
+            <h5 class="card-title">
+
+                <a
+                    href="{{ url_for('dictionary.category', category_id=category.id) }}"
+                    class="text-decoration-none">
+
+                    {{ category.name }}
+
+                </a>
+
+            </h5>
+
+            <p class="card-text">
+                {{ category.description }}
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% endblock %}
