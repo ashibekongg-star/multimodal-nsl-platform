@@ -1,0 +1,783 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}
+Signs Management
+{% endblock %}
+
+{% block admin_content %}
+
+<div class="container-fluid">
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <div class="d-flex flex-wrap justify-content-between
+                align-items-center gap-3 mb-4">
+
+        <div>
+
+            <div class="d-flex align-items-center gap-2 mb-1">
+
+                <i class="bi bi-hand-index-thumb-fill
+                          text-primary fs-3"></i>
+
+                <h2 class="fw-bold mb-0">
+                    Signs Management
+                </h2>
+
+            </div>
+
+            <p class="text-muted mb-0">
+                Manage Nigerian Sign Language dictionary signs,
+                categories and videos.
+            </p>
+
+        </div>
+
+
+        <div class="d-flex flex-wrap gap-2">
+
+            <a href="{{ url_for('admin.add_sign') }}"
+               class="btn btn-primary">
+
+                <i class="bi bi-plus-circle me-1"></i>
+                Add New Sign
+
+            </a>
+
+
+            <a href="{{ url_for('admin.videos') }}"
+               class="btn btn-outline-primary">
+
+                <i class="bi bi-camera-video me-1"></i>
+                Manage Videos
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SUMMARY CARDS
+    ====================================================== -->
+
+    <div class="row g-4 mb-4">
+
+
+        <!-- TOTAL SIGNS -->
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                <div class="card-body p-4">
+
+                    <div class="d-flex
+                                justify-content-between
+                                align-items-start">
+
+                        <div>
+
+                            <small class="text-muted fw-semibold">
+                                TOTAL SIGNS
+                            </small>
+
+                            <h2 class="fw-bold mb-1 mt-1">
+                                {{ signs|length }}
+                            </h2>
+
+                            <small class="text-muted">
+                                Dictionary signs
+                            </small>
+
+                        </div>
+
+                        <div class="bg-primary bg-opacity-10
+                                    text-primary rounded-circle
+                                    d-flex align-items-center
+                                    justify-content-center"
+                             style="width:58px;height:58px;">
+
+                            <i class="bi bi-hand-index-thumb-fill
+                                      fs-4"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ACTIVE SIGNS -->
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                <div class="card-body p-4">
+
+                    <div class="d-flex
+                                justify-content-between
+                                align-items-start">
+
+                        <div>
+
+                            <small class="text-muted fw-semibold">
+                                ACTIVE SIGNS
+                            </small>
+
+                            <h2 class="fw-bold mb-1 mt-1 text-success">
+
+                                {{ signs|selectattr(
+                                    'status',
+                                    'equalto',
+                                    'active'
+                                )|list|length }}
+
+                            </h2>
+
+                            <small class="text-muted">
+                                Available to users
+                            </small>
+
+                        </div>
+
+                        <div class="bg-success bg-opacity-10
+                                    text-success rounded-circle
+                                    d-flex align-items-center
+                                    justify-content-center"
+                             style="width:58px;height:58px;">
+
+                            <i class="bi bi-check-circle-fill
+                                      fs-4"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SIGNS WITH VIDEOS -->
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                <div class="card-body p-4">
+
+                    <div class="d-flex
+                                justify-content-between
+                                align-items-start">
+
+                        <div>
+
+                            <small class="text-muted fw-semibold">
+                                WITH VIDEOS
+                            </small>
+
+                            <h2 class="fw-bold mb-1 mt-1 text-info">
+
+                                {{ signs|selectattr(
+                                    'video_filename'
+                                )|list|length }}
+
+                            </h2>
+
+                            <small class="text-muted">
+                                Signs with video content
+                            </small>
+
+                        </div>
+
+                        <div class="bg-info bg-opacity-10
+                                    text-info rounded-circle
+                                    d-flex align-items-center
+                                    justify-content-center"
+                             style="width:58px;height:58px;">
+
+                            <i class="bi bi-camera-video-fill
+                                      fs-4"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- WITHOUT VIDEOS -->
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                <div class="card-body p-4">
+
+                    <div class="d-flex
+                                justify-content-between
+                                align-items-start">
+
+                        <div>
+
+                            <small class="text-muted fw-semibold">
+                                WITHOUT VIDEOS
+                            </small>
+
+                            <h2 class="fw-bold mb-1 mt-1 text-warning">
+
+                                {{ signs|rejectattr(
+                                    'video_filename'
+                                )|list|length }}
+
+                            </h2>
+
+                            <small class="text-muted">
+                                Signs needing video
+                            </small>
+
+                        </div>
+
+                        <div class="bg-warning bg-opacity-10
+                                    text-warning rounded-circle
+                                    d-flex align-items-center
+                                    justify-content-center"
+                             style="width:58px;height:58px;">
+
+                            <i class="bi bi-camera-video-off-fill
+                                      fs-4"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SEARCH
+    ====================================================== -->
+
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+        <div class="card-body p-4">
+
+            <form method="GET"
+                  action="{{ url_for('admin.signs') }}">
+
+                <div class="row g-3 align-items-end">
+
+
+                    <!-- SEARCH -->
+
+                    <div class="col-lg-8">
+
+                        <label class="form-label fw-semibold">
+
+                            <i class="bi bi-search me-1"></i>
+                            Search Signs
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="search"
+                            value="{{ request.args.get('search', '') }}"
+                            class="form-control form-control-lg"
+                            placeholder="Search by sign word or meaning..."
+                        >
+
+                    </div>
+
+
+                    <!-- BUTTON -->
+
+                    <div class="col-lg-4">
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary btn-lg w-100">
+
+                            <i class="bi bi-search me-1"></i>
+                            Search Signs
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                {% if request.args.get('search') %}
+
+                <div class="mt-3 pt-3 border-top">
+
+                    <span class="text-muted me-2">
+                        Active search:
+                    </span>
+
+                    <span class="badge bg-primary rounded-pill">
+
+                        <i class="bi bi-search me-1"></i>
+
+                        "{{ request.args.get('search') }}"
+
+                    </span>
+
+
+                    <a href="{{ url_for('admin.signs') }}"
+                       class="btn btn-sm btn-outline-secondary ms-2">
+
+                        <i class="bi bi-x-circle me-1"></i>
+                        Clear Search
+
+                    </a>
+
+                </div>
+
+                {% endif %}
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SIGNS TABLE
+    ====================================================== -->
+
+    <div class="card border-0 shadow-sm rounded-4">
+
+        <div class="card-header bg-white border-0 py-4 px-4">
+
+            <div class="d-flex flex-wrap
+                        justify-content-between
+                        align-items-center gap-2">
+
+                <div>
+
+                    <h5 class="fw-bold mb-1">
+
+                        <i class="bi bi-collection
+                                  text-primary me-2"></i>
+
+                        Nigerian Sign Language Dictionary
+
+                    </h5>
+
+                    <small class="text-muted">
+
+                        Manage dictionary entries, videos and
+                        sign availability.
+
+                    </small>
+
+                </div>
+
+
+                <span class="badge bg-primary
+                             rounded-pill px-3 py-2">
+
+                    {{ signs|length }}
+                    sign{% if signs|length != 1 %}s{% endif %}
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="card-body p-0">
+
+            {% if signs %}
+
+            <div class="table-responsive">
+
+                <table class="table table-hover
+                              align-middle mb-0">
+
+                    <thead class="table-light">
+
+                        <tr>
+
+                            <th class="px-4 py-3">
+                                #
+                            </th>
+
+                            <th class="py-3">
+                                Sign
+                            </th>
+
+                            <th class="py-3">
+                                Category
+                            </th>
+
+                            <th class="py-3">
+                                Video
+                            </th>
+
+                            <th class="py-3">
+                                Status
+                            </th>
+
+                            <th class="py-3 text-center">
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for sign in signs %}
+
+                        <tr>
+
+
+                            <!-- NUMBER -->
+
+                            <td class="px-4">
+
+                                <span class="text-muted fw-semibold">
+
+                                    {{ loop.index }}
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- SIGN -->
+
+                            <td>
+
+                                <div class="fw-bold text-dark">
+
+                                    {{ sign.word }}
+
+                                </div>
+
+
+                                {% if sign.meaning %}
+
+                                <small class="text-muted d-block"
+                                       style="max-width:280px;">
+
+                                    {{ sign.meaning|truncate(100) }}
+
+                                </small>
+
+                                {% endif %}
+
+
+                                {% if sign.example_sentence %}
+
+                                <small class="text-muted d-block mt-1">
+
+                                    <i class="bi bi-chat-left-text me-1"></i>
+
+                                    {{ sign.example_sentence|truncate(80) }}
+
+                                </small>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- CATEGORY -->
+
+                            <td>
+
+                                {% if sign.category %}
+
+                                <span class="badge rounded-pill
+                                             bg-primary bg-opacity-10
+                                             text-primary">
+
+                                    <i class="bi bi-folder2-open me-1"></i>
+
+                                    {{ sign.category.name }}
+
+                                </span>
+
+                                {% else %}
+
+                                <span class="badge rounded-pill
+                                             bg-secondary bg-opacity-10
+                                             text-secondary">
+
+                                    Uncategorized
+
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- VIDEO -->
+
+                            <td>
+
+                                {% if sign.video_filename %}
+
+                                <div class="d-flex align-items-center gap-2">
+
+                                    <span class="badge bg-success
+                                                 rounded-pill">
+
+                                        <i class="bi bi-check-circle me-1"></i>
+
+                                        Available
+
+                                    </span>
+
+                                    <small class="text-muted">
+
+                                        {{ sign.video_filename }}
+
+                                    </small>
+
+                                </div>
+
+                                {% else %}
+
+                                <span class="badge bg-warning
+                                             text-dark rounded-pill">
+
+                                    <i class="bi bi-camera-video-off me-1"></i>
+
+                                    No Video
+
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- STATUS -->
+
+                            <td>
+
+                                {% if sign.status == "active" %}
+
+                                <span class="badge bg-success
+                                             rounded-pill">
+
+                                    <i class="bi bi-check-circle me-1"></i>
+
+                                    Active
+
+                                </span>
+
+                                {% else %}
+
+                                <span class="badge bg-secondary
+                                             rounded-pill">
+
+                                    <i class="bi bi-pause-circle me-1"></i>
+
+                                    Inactive
+
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- ACTIONS -->
+
+                            <td>
+
+                                <div class="d-flex
+                                            justify-content-center
+                                            gap-2">
+
+
+                                    <!-- EDIT -->
+
+                                    <a
+                                        href="{{ url_for(
+                                            'admin.edit_sign',
+                                            sign_id=sign.id
+                                        ) }}"
+                                        class="btn btn-sm
+                                               btn-outline-primary"
+                                        title="Edit sign">
+
+                                        <i class="bi bi-pencil"></i>
+
+                                    </a>
+
+
+                                    <!-- DELETE -->
+
+                                    <a
+                                        href="{{ url_for(
+                                            'admin.delete_sign',
+                                            sign_id=sign.id
+                                        ) }}"
+                                        class="btn btn-sm
+                                               btn-outline-danger"
+                                        title="Delete sign"
+                                        onclick="return confirm(
+                                            'Are you sure you want to delete {{ sign.word|e }}?'
+                                        );">
+
+                                        <i class="bi bi-trash"></i>
+
+                                    </a>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- =================================================
+                 TABLE FOOTER
+            ================================================== -->
+
+            <div class="border-top px-4 py-3 bg-light">
+
+                <div class="d-flex flex-wrap
+                            justify-content-between
+                            align-items-center gap-2">
+
+                    <small class="text-muted">
+
+                        <i class="bi bi-info-circle me-1"></i>
+
+                        Manage your Nigerian Sign Language
+                        dictionary entries from this page.
+
+                    </small>
+
+
+                    <small class="text-muted">
+
+                        Showing
+                        <strong>{{ signs|length }}</strong>
+                        sign{% if signs|length != 1 %}s{% endif %}
+
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            {% else %}
+
+
+            <!-- =================================================
+                 EMPTY STATE
+            ================================================== -->
+
+            <div class="text-center py-5 px-3">
+
+                <div class="mb-3">
+
+                    <i class="bi bi-hand-index-thumb
+                              text-muted"
+                       style="font-size:4rem;">
+
+                    </i>
+
+                </div>
+
+
+                <h5 class="fw-bold">
+                    No signs found
+                </h5>
+
+
+                <p class="text-muted mb-4">
+
+                    {% if request.args.get('search') %}
+
+                        No signs match your search.
+
+                    {% else %}
+
+                        No dictionary signs have been added yet.
+
+                    {% endif %}
+
+                </p>
+
+
+                {% if request.args.get('search') %}
+
+                <a
+                    href="{{ url_for('admin.signs') }}"
+                    class="btn btn-outline-primary me-2">
+
+                    <i class="bi bi-arrow-clockwise me-1"></i>
+
+                    Show All Signs
+
+                </a>
+
+                {% endif %}
+
+
+                <a
+                    href="{{ url_for('admin.add_sign') }}"
+                    class="btn btn-primary">
+
+                    <i class="bi bi-plus-circle me-1"></i>
+
+                    Add New Sign
+
+                </a>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

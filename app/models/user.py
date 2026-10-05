@@ -1,57 +1,100 @@
-from datetime import datetime, timezone
+from datetime import datetime
+
+from flask_login import UserMixin
 
 from app import db
 
 
-class User(db.Model):
+class User(UserMixin, db.Model):
+
     __tablename__ = "users"
 
-    id = db.Column(db.Integer, primary_key=True)
+    # =====================================================
+    # PRIMARY KEY
+    # =====================================================
 
-    username = db.Column(
-        db.String(80),
-        unique=True,
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    # =====================================================
+    # USER INFORMATION
+    # =====================================================
+
+    full_name = db.Column(
+        db.String(120),
         nullable=False
     )
 
     email = db.Column(
-        db.String(255),
+        db.String(120),
         unique=True,
         nullable=False
     )
 
-    password_hash = db.Column(
+    phone = db.Column(
+        db.String(30),
+        nullable=True
+    )
+
+    bio = db.Column(
+        db.Text,
+        nullable=True
+    )
+
+    # =====================================================
+    # PROFILE IMAGE
+    # =====================================================
+
+    profile_image = db.Column(
+        db.String(255),
+        default="default.png",
+        nullable=True
+    )
+
+    # =====================================================
+    # LOGIN INFORMATION
+    # =====================================================
+
+    password = db.Column(
         db.String(255),
         nullable=False
     )
 
-    first_name = db.Column(db.String(100))
-    last_name = db.Column(db.String(100))
+    # =====================================================
+    # USER ROLE
+    # =====================================================
 
     role = db.Column(
-        db.String(20),
+        db.String(50),
         nullable=False,
         default="user"
     )
 
-    is_active = db.Column(
-        db.Boolean,
+    # =====================================================
+    # ACCOUNT STATUS
+    # =====================================================
+
+    status = db.Column(
+        db.String(20),
         nullable=False,
-        default=True
+        default="active"
     )
+
+    # =====================================================
+    # ACCOUNT CREATION DATE
+    # =====================================================
 
     created_at = db.Column(
-        db.DateTime(timezone=True),
-        nullable=False,
-        default=lambda: datetime.now(timezone.utc)
+        db.DateTime,
+        default=datetime.utcnow
     )
 
-    updated_at = db.Column(
-        db.DateTime(timezone=True),
-        nullable=False,
-        default=lambda: datetime.now(timezone.utc),
-        onupdate=lambda: datetime.now(timezone.utc)
-    )
+    # =====================================================
+    # REPRESENTATION
+    # =====================================================
 
     def __repr__(self):
-        return f"<User {self.username}>"
+
+        return f"<User {self.email}>"

@@ -1,0 +1,567 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}
+Add New Sign
+{% endblock %}
+
+{% block admin_content %}
+
+<div class="container-fluid">
+
+    <!-- PAGE HEADER -->
+
+    <div class="d-flex flex-wrap
+                justify-content-between
+                align-items-center gap-3 mb-4">
+
+        <div>
+
+            <div class="d-flex align-items-center gap-2 mb-1">
+
+                <i class="bi bi-plus-circle-fill
+                          text-primary fs-3"></i>
+
+                <h2 class="fw-bold mb-0">
+                    Add New Sign
+                </h2>
+
+            </div>
+
+            <p class="text-muted mb-0">
+                Add a Nigerian Sign Language dictionary entry
+                and optional video.
+            </p>
+
+        </div>
+
+
+        <div class="d-flex gap-2">
+
+            <a href="{{ url_for('admin.signs') }}"
+               class="btn btn-outline-primary">
+
+                <i class="bi bi-arrow-left me-1"></i>
+                Back to Signs
+
+            </a>
+
+            <a href="{{ url_for('admin.videos') }}"
+               class="btn btn-outline-secondary">
+
+                <i class="bi bi-camera-video me-1"></i>
+                Videos
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- FORM -->
+
+    <div class="row g-4">
+
+
+        <!-- MAIN FORM -->
+
+        <div class="col-xl-8">
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-header bg-white border-0
+                            py-4 px-4">
+
+                    <h5 class="fw-bold mb-1">
+
+                        <i class="bi bi-hand-index-thumb
+                                  text-primary me-2"></i>
+
+                        Sign Information
+
+                    </h5>
+
+                    <small class="text-muted">
+                        Enter the details for the new
+                        Nigerian Sign Language sign.
+                    </small>
+
+                </div>
+
+
+                <div class="card-body p-4">
+
+                    <form method="POST"
+                          enctype="multipart/form-data">
+
+                        {{ form.hidden_tag() }}
+
+
+                        <!-- SIGN WORD -->
+
+                        <div class="mb-4">
+
+                            {{ form.word.label(
+                                class="form-label fw-semibold"
+                            ) }}
+
+                            {% if form.word.errors %}
+
+                            {{ form.word(
+                                class="form-control form-control-lg
+                                       is-invalid",
+                                placeholder="Enter sign word"
+                            ) }}
+
+                            <div class="invalid-feedback">
+
+                                {% for error in form.word.errors %}
+
+                                    {{ error }}
+
+                                {% endfor %}
+
+                            </div>
+
+                            {% else %}
+
+                            {{ form.word(
+                                class="form-control form-control-lg",
+                                placeholder="Example: Hello"
+                            ) }}
+
+                            {% endif %}
+
+                            <small class="text-muted">
+                                Enter the English word or phrase
+                                represented by this NSL sign.
+                            </small>
+
+                        </div>
+
+
+                        <!-- MEANING -->
+
+                        <div class="mb-4">
+
+                            {{ form.meaning.label(
+                                class="form-label fw-semibold"
+                            ) }}
+
+                            {% if form.meaning.errors %}
+
+                            {{ form.meaning(
+                                class="form-control is-invalid",
+                                rows="4",
+                                placeholder="Describe the meaning of the sign..."
+                            ) }}
+
+                            <div class="invalid-feedback">
+
+                                {% for error in form.meaning.errors %}
+
+                                    {{ error }}
+
+                                {% endfor %}
+
+                            </div>
+
+                            {% else %}
+
+                            {{ form.meaning(
+                                class="form-control",
+                                rows="4",
+                                placeholder="Describe the meaning of the sign..."
+                            ) }}
+
+                            {% endif %}
+
+                            <small class="text-muted">
+                                Provide a clear explanation of the sign.
+                            </small>
+
+                        </div>
+
+
+                        <!-- DESCRIPTION -->
+
+                        {% if form.description is defined %}
+
+                        <div class="mb-4">
+
+                            {{ form.description.label(
+                                class="form-label fw-semibold"
+                            ) }}
+
+                            {{ form.description(
+                                class="form-control",
+                                rows="4",
+                                placeholder="Add additional information about the sign..."
+                            ) }}
+
+                            <small class="text-muted">
+                                Optional additional description.
+                            </small>
+
+                        </div>
+
+                        {% endif %}
+
+
+                        <!-- EXAMPLE SENTENCE -->
+
+                        {% if form.example_sentence is defined %}
+
+                        <div class="mb-4">
+
+                            {{ form.example_sentence.label(
+                                class="form-label fw-semibold"
+                            ) }}
+
+                            {{ form.example_sentence(
+                                class="form-control",
+                                rows="3",
+                                placeholder="Example: Hello, how are you?"
+                            ) }}
+
+                            <small class="text-muted">
+                                Give an example sentence using this sign.
+                            </small>
+
+                        </div>
+
+                        {% endif %}
+
+
+                        <!-- CATEGORY -->
+
+                        <div class="mb-4">
+
+                            {{ form.category_id.label(
+                                class="form-label fw-semibold"
+                            ) }}
+
+                            {% if form.category_id.errors %}
+
+                            {{ form.category_id(
+                                class="form-select form-select-lg
+                                       is-invalid"
+                            ) }}
+
+                            <div class="invalid-feedback">
+
+                                {% for error in form.category_id.errors %}
+
+                                    {{ error }}
+
+                                {% endfor %}
+
+                            </div>
+
+                            {% else %}
+
+                            {{ form.category_id(
+                                class="form-select form-select-lg"
+                            ) }}
+
+                            {% endif %}
+
+                            <small class="text-muted">
+                                Select the appropriate dictionary category.
+                            </small>
+
+                        </div>
+
+
+                        <!-- STATUS -->
+
+                        {% if form.status is defined %}
+
+                        <div class="mb-4">
+
+                            {{ form.status.label(
+                                class="form-label fw-semibold"
+                            ) }}
+
+                            {{ form.status(
+                                class="form-select form-select-lg"
+                            ) }}
+
+                            <small class="text-muted">
+                                Active signs are available to platform users.
+                            </small>
+
+                        </div>
+
+                        {% endif %}
+
+
+                        <!-- VIDEO -->
+
+                        {% if form.video is defined %}
+
+                        <div class="mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                <i class="bi bi-camera-video me-1"></i>
+
+                                NSL Video
+
+                            </label>
+
+                            {{ form.video(
+                                class="form-control form-control-lg"
+                            ) }}
+
+                            <small class="text-muted d-block mt-2">
+
+                                Upload the prepared Nigerian Sign Language
+                                video for this sign.
+
+                            </small>
+
+                            <div class="alert alert-info mt-3 mb-0">
+
+                                <i class="bi bi-info-circle me-2"></i>
+
+                                Use a clear MP4 video with good lighting
+                                and the signer fully visible.
+
+                            </div>
+
+                        </div>
+
+                        {% endif %}
+
+
+                        <!-- SUBMIT -->
+
+                        <div class="border-top pt-4 mt-4">
+
+                            <div class="d-flex flex-wrap gap-2">
+
+                                {{ form.submit(
+                                    class="btn btn-primary btn-lg px-4"
+                                ) }}
+
+                                <a
+                                    href="{{ url_for('admin.signs') }}"
+                                    class="btn btn-outline-secondary btn-lg">
+
+                                    Cancel
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- INFORMATION PANEL -->
+
+        <div class="col-xl-4">
+
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+                <div class="card-body p-4">
+
+                    <div class="d-flex align-items-center gap-3 mb-3">
+
+                        <div class="bg-primary bg-opacity-10
+                                    text-primary rounded-circle
+                                    d-flex align-items-center
+                                    justify-content-center"
+                             style="width:52px;height:52px;">
+
+                            <i class="bi bi-lightbulb-fill fs-5"></i>
+
+                        </div>
+
+                        <div>
+
+                            <h5 class="fw-bold mb-0">
+                                Entry Guidelines
+                            </h5>
+
+                            <small class="text-muted">
+                                Recommended information
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <div class="fw-semibold mb-1">
+
+                            <i class="bi bi-check-circle
+                                      text-success me-1"></i>
+
+                            Sign Word
+
+                        </div>
+
+                        <small class="text-muted">
+
+                            Use a simple and recognizable English
+                            word or phrase.
+
+                        </small>
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <div class="fw-semibold mb-1">
+
+                            <i class="bi bi-check-circle
+                                      text-success me-1"></i>
+
+                            Meaning
+
+                        </div>
+
+                        <small class="text-muted">
+
+                            Explain what the sign represents
+                            clearly.
+
+                        </small>
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <div class="fw-semibold mb-1">
+
+                            <i class="bi bi-check-circle
+                                      text-success me-1"></i>
+
+                            Category
+
+                        </div>
+
+                        <small class="text-muted">
+
+                            Place the sign in the correct
+                            dictionary category.
+
+                        </small>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="fw-semibold mb-1">
+
+                            <i class="bi bi-check-circle
+                                      text-success me-1"></i>
+
+                            Video
+
+                        </div>
+
+                        <small class="text-muted">
+
+                            Use a clear prepared NSL demonstration
+                            video where possible.
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- VIDEO TIPS -->
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-body p-4">
+
+                    <h5 class="fw-bold mb-3">
+
+                        <i class="bi bi-camera-video-fill
+                                  text-primary me-2"></i>
+
+                        Video Quality Tips
+
+                    </h5>
+
+
+                    <ul class="list-unstyled mb-0">
+
+                        <li class="mb-3">
+
+                            <i class="bi bi-check-circle-fill
+                                      text-success me-2"></i>
+
+                            Use good lighting.
+
+                        </li>
+
+                        <li class="mb-3">
+
+                            <i class="bi bi-check-circle-fill
+                                      text-success me-2"></i>
+
+                            Keep the signer clearly visible.
+
+                        </li>
+
+                        <li class="mb-3">
+
+                            <i class="bi bi-check-circle-fill
+                                      text-success me-2"></i>
+
+                            Keep the camera stable.
+
+                        </li>
+
+                        <li class="mb-3">
+
+                            <i class="bi bi-check-circle-fill
+                                      text-success me-2"></i>
+
+                            Use MP4 format where possible.
+
+                        </li>
+
+                        <li>
+
+                            <i class="bi bi-check-circle-fill
+                                      text-success me-2"></i>
+
+                            Avoid unnecessary background movement.
+
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

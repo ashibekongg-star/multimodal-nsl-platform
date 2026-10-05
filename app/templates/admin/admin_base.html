@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="row">
+
+        <!-- Sidebar -->
+
+        <div class="col-md-3 col-lg-2 bg-white border-end shadow-sm min-vh-100 p-0">
+
+            <div class="p-4 border-bottom">
+
+                <h4 class="text-primary fw-bold mb-0">
+
+                    <i class="bi bi-grid-1x2-fill"></i>
+
+                    NSL Admin
+
+                </h4>
+
+            </div>
+
+            <div class="list-group list-group-flush">
+
+                <a
+                    href="{{ url_for('admin.dashboard') }}"
+                    class="list-group-item list-group-item-action py-3">
+
+                    <i class="bi bi-speedometer2 me-2"></i>
+
+                    Dashboard
+
+                </a>
+
+                <a
+                    href="{{ url_for('admin.categories') }}"
+                    class="list-group-item list-group-item-action py-3">
+
+                    <i class="bi bi-folder me-2"></i>
+
+                    Categories
+
+                </a>
+
+                <a
+                    href="{{ url_for('admin.signs') }}"
+                    class="list-group-item list-group-item-action py-3">
+
+                    <i class="bi bi-hand-index-thumb me-2"></i>
+
+                    Signs
+
+                </a>
+
+                <a
+                    href="{{ url_for('admin.videos') }}"
+                    class="list-group-item list-group-item-action py-3">
+
+                    <i class="bi bi-camera-video me-2"></i>
+                    Videos
+
+                </a>
+
+                <a
+                    href="{{ url_for('admin.users') }}"
+                    class="list-group-item list-group-item-action py-3">
+
+                    <i class="bi bi-people me-2"></i>
+
+                    Users
+
+                </a>
+
+                <a
+                    href="#"
+                    class="list-group-item list-group-item-action py-3">
+
+                    <i class="bi bi-bar-chart me-2"></i>
+
+                    Reports
+
+                </a>
+
+                <a
+                    href="#"
+                    class="list-group-item list-group-item-action py-3">
+
+                    <i class="bi bi-gear me-2"></i>
+
+                    Settings
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <!-- Main Content -->
+
+        <div class="col-md-9 col-lg-10">
+
+            <div class="p-4">
+
+                {% block admin_content %}
+                {% endblock %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+{% endblock %}

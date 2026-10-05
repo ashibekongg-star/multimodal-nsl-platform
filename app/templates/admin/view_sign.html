@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+
+{% block title %}
+View Sign
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- Header -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+                {{ sign.word }}
+            </h2>
+
+            <p class="text-muted">
+                Nigerian Sign Language Information
+            </p>
+
+        </div>
+
+        <a href="{{ url_for('admin.signs') }}"
+           class="btn btn-secondary">
+
+            <i class="bi bi-arrow-left"></i>
+
+            Back to Signs
+
+        </a>
+
+    </div>
+
+    <div class="row">
+
+        <!-- Left -->
+
+        <div class="col-lg-8">
+
+            <div class="card shadow border-0">
+
+                <div class="card-header bg-primary text-white">
+
+                    <h5 class="mb-0">
+                        Sign Information
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+
+                    <table class="table table-bordered">
+
+                        <tr>
+                            <th width="200">Word</th>
+                            <td>{{ sign.word }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Meaning</th>
+                            <td>{{ sign.meaning }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Description</th>
+                            <td>{{ sign.description }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Example Sentence</th>
+                            <td>{{ sign.example_sentence }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Category</th>
+                            <td>{{ sign.category.name }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Status</th>
+                            <td>
+
+                                {% if sign.status == "active" %}
+
+                                    <span class="badge bg-success">
+                                        Active
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge bg-secondary">
+                                        Inactive
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Right -->
+
+        <div class="col-lg-4">
+
+            <div class="card shadow border-0">
+
+                <div class="card-header bg-primary text-white">
+
+                    <h5 class="mb-0">
+                        Video
+                    </h5>
+
+                </div>
+
+                <div class="card-body text-center">
+
+                    {% if sign.video_filename %}
+
+                        <video controls
+                               class="w-100 rounded">
+
+                            <source
+                                src="{{ url_for('static', filename='videos/' + sign.video_filename) }}"
+                                type="video/mp4">
+
+                        </video>
+
+                    {% else %}
+
+                        <div class="alert alert-warning">
+
+                            No video uploaded.
+
+                        </div>
+
+                    {% endif %}
+
+                    <hr>
+
+                    <a href="{{ url_for('admin.edit_sign', sign_id=sign.id) }}"
+                       class="btn btn-warning">
+
+                        <i class="bi bi-pencil-square"></i>
+
+                        Edit
+
+                    </a>
+
+                    <a href="{{ url_for('admin.delete_sign', sign_id=sign.id) }}"
+                       class="btn btn-danger">
+
+                        <i class="bi bi-trash-fill"></i>
+
+                        Delete
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,55 +1,486 @@
 {% extends "base.html" %}
 
 {% block title %}
-{{ category.name }}
+{{ category.name }} - NSL Dictionary
 {% endblock %}
 
 {% block content %}
 
-<a href="{{ url_for('dictionary.categories') }}" class="btn btn-secondary mb-4">
-    ← Back to Categories
-</a>
+<div class="container-fluid">
 
-<h1>{{ category.name }}</h1>
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
 
-<p class="text-muted">
-    {{ category.description }}
-</p>
+    <div class="card border-0 shadow-sm rounded-4 mb-5 overflow-hidden">
 
-<div class="row">
+        <div class="card-body bg-primary text-white p-5">
 
-{% for sign in signs %}
+            <div class="row align-items-center">
 
-<div class="col-md-6 mb-3">
+                <div class="col-lg-8">
 
-    <div class="card shadow-sm">
+                    <!-- Breadcrumb -->
 
-        <div class="card-body">
+                    <nav aria-label="breadcrumb">
 
-            <h4>{{ sign.word }}</h4>
+                        <ol class="breadcrumb mb-3">
 
-            <p>{{ sign.meaning }}</p>
+                            <li class="breadcrumb-item">
 
-            <a
-                href="{{ url_for('dictionary.sign', sign_id=sign.id) }}"
-                class="btn btn-primary">
+                                <a
+                                    href="{{ url_for('dictionary.categories') }}"
+                                    class="text-white text-decoration-none">
 
-                View Details
+                                    <i class="bi bi-book me-1"></i>
 
-            </a>
+                                    Dictionary
+
+                                </a>
+
+                            </li>
+
+                            <li class="breadcrumb-item active text-white">
+
+                                {{ category.name }}
+
+                            </li>
+
+                        </ol>
+
+                    </nav>
+
+
+                    <h1 class="display-5 fw-bold mb-3">
+
+                        {{ category.name }}
+
+                    </h1>
+
+
+                    <p class="lead mb-3">
+
+                        {{ category.description
+                           or "Browse Nigerian Sign Language signs in this category." }}
+
+                    </p>
+
+
+                    <span class="badge bg-white text-primary fs-6 px-3 py-2">
+
+                        <i class="bi bi-hand-index-thumb me-1"></i>
+
+                        {{ signs|length }} Signs Available
+
+                    </span>
+
+                </div>
+
+
+                <div class="col-lg-4 text-center mt-4 mt-lg-0">
+
+                    <i
+                        class="bi bi-folder2-open"
+                        style="font-size: 100px;">
+                    </i>
+
+                </div>
+
+            </div>
 
         </div>
 
     </div>
 
+
+    <!-- =====================================================
+         SEARCH
+    ====================================================== -->
+
+    <div class="card border-0 shadow-sm rounded-4 mb-5">
+
+        <div class="card-body p-4">
+
+            <label
+                for="searchBox"
+                class="form-label fw-bold">
+
+                <i class="bi bi-search text-primary me-2"></i>
+
+                Search Signs
+
+            </label>
+
+
+            <div class="input-group input-group-lg">
+
+                <span class="input-group-text bg-white">
+
+                    <i class="bi bi-search text-primary"></i>
+
+                </span>
+
+
+                <input
+                    id="searchBox"
+                    type="text"
+                    class="form-control"
+                    placeholder="Search for a sign..."
+                    autocomplete="off">
+
+
+                <button
+                    type="button"
+                    id="clearSearch"
+                    class="btn btn-outline-secondary">
+
+                    <i class="bi bi-x-circle"></i>
+
+                    Clear
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SEARCH RESULT MESSAGE
+    ====================================================== -->
+
+    <div
+        id="noResults"
+        class="alert alert-warning text-center rounded-4 shadow-sm"
+        style="display: none;">
+
+        <i class="bi bi-search display-5"></i>
+
+        <h5 class="fw-bold mt-3">
+
+            No signs found
+
+        </h5>
+
+        <p class="mb-0">
+
+            Try another word or search term.
+
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         SIGNS HEADER
+    ====================================================== -->
+
+    <div class="d-flex justify-content-between
+                align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold mb-1">
+
+                Signs in {{ category.name }}
+
+            </h2>
+
+            <p class="text-muted mb-0">
+
+                Select a sign to view its Nigerian Sign Language video.
+
+            </p>
+
+        </div>
+
+
+        <span class="badge bg-primary fs-6 px-3 py-2">
+
+            {{ signs|length }} Signs
+
+        </span>
+
+    </div>
+
+
+    <!-- =====================================================
+         SIGN CARDS
+    ====================================================== -->
+
+    <div
+        class="row g-4"
+        id="signContainer">
+
+        {% for sign in signs %}
+
+        <div class="col-md-6 col-lg-4 sign-card-wrapper">
+
+            <div
+                class="card border-0 shadow-sm rounded-4 h-100 sign-card overflow-hidden">
+
+
+                <!-- Icon Header -->
+
+                <div
+                    class="bg-primary text-white text-center p-4">
+
+                    <i
+                        class="bi bi-hand-index-thumb-fill"
+                        style="font-size: 55px;">
+                    </i>
+
+                </div>
+
+
+                <!-- Card Body -->
+
+                <div class="card-body p-4">
+
+
+                    <!-- Word -->
+
+                    <h3 class="fw-bold mb-2">
+
+                        {{ sign.word }}
+
+                    </h3>
+
+
+                    <!-- Meaning -->
+
+                    <p class="text-muted mb-3">
+
+                        {{ sign.meaning
+                           or "No meaning available." }}
+
+                    </p>
+
+
+                    <!-- Video -->
+
+                    <div class="mb-3">
+
+                        {% if sign.video_filename %}
+
+                        <span class="badge bg-success rounded-pill px-3 py-2">
+
+                            <i class="bi bi-camera-video-fill me-1"></i>
+
+                            Video Available
+
+                        </span>
+
+                        {% else %}
+
+                        <span class="badge bg-secondary rounded-pill px-3 py-2">
+
+                            <i class="bi bi-camera-video-off-fill me-1"></i>
+
+                            No Video
+
+                        </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- Status -->
+
+                    {% if sign.status == "active" %}
+
+                    <span class="badge bg-primary rounded-pill px-3 py-2 mb-4">
+
+                        Active
+
+                    </span>
+
+                    {% else %}
+
+                    <span class="badge bg-secondary rounded-pill px-3 py-2 mb-4">
+
+                        Inactive
+
+                    </span>
+
+                    {% endif %}
+
+
+                    <!-- View Sign -->
+
+                    <a
+                        href="{{ url_for(
+                            'dictionary.sign',
+                            sign_id=sign.id
+                        ) }}"
+                        class="btn btn-primary w-100 rounded-pill">
+
+                        <i class="bi bi-play-circle-fill me-2"></i>
+
+                        View Sign
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% else %}
+
+
+        <!-- =================================================
+             NO SIGNS
+        ================================================== -->
+
+        <div class="col-12">
+
+            <div
+                class="alert alert-warning text-center
+                       rounded-4 shadow-sm p-5">
+
+                <i
+                    class="bi bi-folder-x display-3">
+                </i>
+
+
+                <h3 class="mt-3 fw-bold">
+
+                    No Signs Found
+
+                </h3>
+
+
+                <p class="text-muted">
+
+                    This category does not contain any
+                    Nigerian Sign Language signs yet.
+
+                </p>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+
+    <!-- =====================================================
+         BACK BUTTON
+    ====================================================== -->
+
+    <div class="text-center mt-5 mb-4">
+
+        <a
+            href="{{ url_for('dictionary.categories') }}"
+            class="btn btn-outline-primary btn-lg rounded-pill px-4">
+
+            <i class="bi bi-arrow-left me-2"></i>
+
+            Back to Dictionary
+
+        </a>
+
+    </div>
+
 </div>
 
-{% else %}
+{% endblock %}
 
-<p>No signs available.</p>
 
-{% endfor %}
+{% block scripts %}
 
-</div>
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const searchBox =
+        document.getElementById("searchBox");
+
+    const clearSearch =
+        document.getElementById("clearSearch");
+
+    const cards =
+        document.querySelectorAll(".sign-card-wrapper");
+
+    const noResults =
+        document.getElementById("noResults");
+
+
+    function searchSigns() {
+
+        const keyword =
+            searchBox.value
+                .toLowerCase()
+                .trim();
+
+        let visibleCount = 0;
+
+
+        cards.forEach(function (card) {
+
+            const text =
+                card.innerText.toLowerCase();
+
+
+            if (text.includes(keyword)) {
+
+                card.style.display = "";
+
+                visibleCount++;
+
+            } else {
+
+                card.style.display = "none";
+
+            }
+
+        });
+
+
+        if (
+            visibleCount === 0 &&
+            keyword !== ""
+        ) {
+
+            noResults.style.display = "block";
+
+        } else {
+
+            noResults.style.display = "none";
+
+        }
+
+    }
+
+
+    searchBox.addEventListener(
+        "input",
+        searchSigns
+    );
+
+
+    clearSearch.addEventListener(
+        "click",
+        function () {
+
+            searchBox.value = "";
+
+            searchSigns();
+
+            searchBox.focus();
+
+        }
+    );
+
+});
+
+</script>
 
 {% endblock %}

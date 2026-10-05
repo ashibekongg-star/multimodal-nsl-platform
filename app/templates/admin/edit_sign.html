@@ -1,0 +1,604 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}
+Edit Sign
+{% endblock %}
+
+{% block admin_content %}
+
+<div class="container-fluid">
+
+    <!-- PAGE HEADER -->
+
+    <div class="d-flex flex-wrap justify-content-between
+                align-items-center gap-3 mb-4">
+
+        <div>
+
+            <div class="d-flex align-items-center gap-2 mb-1">
+
+                <i class="bi bi-pencil-square
+                          text-primary fs-3"></i>
+
+                <h2 class="fw-bold mb-0">
+                    Edit Sign
+                </h2>
+
+            </div>
+
+            <p class="text-muted mb-0">
+                Update the Nigerian Sign Language dictionary entry,
+                category, status or video.
+            </p>
+
+        </div>
+
+        <div class="d-flex flex-wrap gap-2">
+
+            <a href="{{ url_for('admin.signs') }}"
+               class="btn btn-outline-primary">
+
+                <i class="bi bi-arrow-left me-1"></i>
+                Back to Signs
+
+            </a>
+
+            <a href="{{ url_for('admin.videos') }}"
+               class="btn btn-outline-secondary">
+
+                <i class="bi bi-camera-video me-1"></i>
+                Videos
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- CONTENT -->
+
+    <div class="row g-4">
+
+
+        <!-- EDIT FORM -->
+
+        <div class="col-xl-8">
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-header bg-white border-0
+                            py-4 px-4">
+
+                    <h5 class="fw-bold mb-1">
+
+                        <i class="bi bi-hand-index-thumb
+                                  text-primary me-2"></i>
+
+                        Sign Information
+
+                    </h5>
+
+                    <small class="text-muted">
+
+                        Modify the information for this
+                        dictionary sign.
+
+                    </small>
+
+                </div>
+
+
+                <div class="card-body p-4">
+
+                    <form method="POST"
+                          enctype="multipart/form-data">
+
+                        {{ form.hidden_tag() }}
+
+
+                        <!-- WORD -->
+
+                        <div class="mb-4">
+
+                            {{ form.word.label(
+                                class="form-label fw-semibold"
+                            ) }}
+
+                            {% if form.word.errors %}
+
+                            {{ form.word(
+                                class="form-control form-control-lg
+                                       is-invalid"
+                            ) }}
+
+                            <div class="invalid-feedback">
+
+                                {% for error in form.word.errors %}
+
+                                    {{ error }}
+
+                                {% endfor %}
+
+                            </div>
+
+                            {% else %}
+
+                            {{ form.word(
+                                class="form-control form-control-lg"
+                            ) }}
+
+                            {% endif %}
+
+                            <small class="text-muted">
+                                English word or phrase represented
+                                by the NSL sign.
+                            </small>
+
+                        </div>
+
+
+                        <!-- MEANING -->
+
+                        <div class="mb-4">
+
+                            {{ form.meaning.label(
+                                class="form-label fw-semibold"
+                            ) }}
+
+                            {% if form.meaning.errors %}
+
+                            {{ form.meaning(
+                                class="form-control is-invalid",
+                                rows="4"
+                            ) }}
+
+                            <div class="invalid-feedback">
+
+                                {% for error in form.meaning.errors %}
+
+                                    {{ error }}
+
+                                {% endfor %}
+
+                            </div>
+
+                            {% else %}
+
+                            {{ form.meaning(
+                                class="form-control",
+                                rows="4"
+                            ) }}
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- DESCRIPTION -->
+
+                        {% if form.description is defined %}
+
+                        <div class="mb-4">
+
+                            {{ form.description.label(
+                                class="form-label fw-semibold"
+                            ) }}
+
+                            {{ form.description(
+                                class="form-control",
+                                rows="4"
+                            ) }}
+
+                        </div>
+
+                        {% endif %}
+
+
+                        <!-- EXAMPLE SENTENCE -->
+
+                        {% if form.example_sentence is defined %}
+
+                        <div class="mb-4">
+
+                            {{ form.example_sentence.label(
+                                class="form-label fw-semibold"
+                            ) }}
+
+                            {{ form.example_sentence(
+                                class="form-control",
+                                rows="3"
+                            ) }}
+
+                        </div>
+
+                        {% endif %}
+
+
+                        <!-- CATEGORY -->
+
+                        <div class="mb-4">
+
+                            {{ form.category_id.label(
+                                class="form-label fw-semibold"
+                            ) }}
+
+                            {% if form.category_id.errors %}
+
+                            {{ form.category_id(
+                                class="form-select form-select-lg
+                                       is-invalid"
+                            ) }}
+
+                            <div class="invalid-feedback">
+
+                                {% for error in form.category_id.errors %}
+
+                                    {{ error }}
+
+                                {% endfor %}
+
+                            </div>
+
+                            {% else %}
+
+                            {{ form.category_id(
+                                class="form-select form-select-lg"
+                            ) }}
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- STATUS -->
+
+                        {% if form.status is defined %}
+
+                        <div class="mb-4">
+
+                            {{ form.status.label(
+                                class="form-label fw-semibold"
+                            ) }}
+
+                            {{ form.status(
+                                class="form-select form-select-lg"
+                            ) }}
+
+                            <small class="text-muted">
+
+                                Active signs are available
+                                to platform users.
+
+                            </small>
+
+                        </div>
+
+                        {% endif %}
+
+
+                        <!-- VIDEO UPLOAD -->
+
+                        {% if form.video is defined %}
+
+                        <div class="mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                <i class="bi bi-camera-video me-1"></i>
+
+                                Replace Video
+
+                            </label>
+
+                            {{ form.video(
+                                class="form-control form-control-lg"
+                            ) }}
+
+                            <small class="text-muted d-block mt-2">
+
+                                Leave this empty if you do not want
+                                to replace the current video.
+
+                            </small>
+
+                        </div>
+
+                        {% endif %}
+
+
+                        <!-- CURRENT VIDEO -->
+
+                        {% if sign.video_filename %}
+
+                        <div class="card border
+                                    bg-light rounded-4 mb-4">
+
+                            <div class="card-body p-4">
+
+                                <h6 class="fw-bold mb-3">
+
+                                    <i class="bi bi-play-circle-fill
+                                              text-success me-2"></i>
+
+                                    Current Video
+
+                                </h6>
+
+                                <video
+                                    controls
+                                    preload="metadata"
+                                    class="rounded shadow-sm w-100"
+                                    style="max-height:360px;
+                                           background:#111;">
+
+                                    <source
+                                        src="{{ url_for(
+                                            'static',
+                                            filename='videos/' ~
+                                            sign.video_filename
+                                        ) }}"
+                                        type="video/mp4"
+                                    >
+
+                                    Your browser does not support
+                                    video playback.
+
+                                </video>
+
+                                <div class="mt-3">
+
+                                    <small class="text-muted">
+                                        Current filename:
+                                    </small>
+
+                                    <code class="d-block text-break mt-1">
+                                        {{ sign.video_filename }}
+                                    </code>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        {% else %}
+
+                        <div class="alert alert-warning">
+
+                            <i class="bi bi-camera-video-off me-2"></i>
+
+                            This sign currently has no video.
+
+                        </div>
+
+                        {% endif %}
+
+
+                        <!-- ACTIONS -->
+
+                        <div class="border-top pt-4 mt-4">
+
+                            <div class="d-flex flex-wrap gap-2">
+
+                                {{ form.submit(
+                                    class="btn btn-primary btn-lg px-4"
+                                ) }}
+
+                                <a
+                                    href="{{ url_for('admin.signs') }}"
+                                    class="btn btn-outline-secondary btn-lg">
+
+                                    Cancel
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT INFORMATION PANEL -->
+
+        <div class="col-xl-4">
+
+
+            <!-- SIGN SUMMARY -->
+
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+                <div class="card-body p-4">
+
+                    <h5 class="fw-bold mb-3">
+
+                        <i class="bi bi-info-circle-fill
+                                  text-primary me-2"></i>
+
+                        Sign Summary
+
+                    </h5>
+
+
+                    <div class="mb-3">
+
+                        <small class="text-muted d-block">
+                            Sign
+                        </small>
+
+                        <strong>
+                            {{ sign.word }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <small class="text-muted d-block">
+                            Category
+                        </small>
+
+                        {% if sign.category %}
+
+                        <span class="badge bg-primary
+                                     rounded-pill mt-1">
+
+                            {{ sign.category.name }}
+
+                        </span>
+
+                        {% else %}
+
+                        <span class="text-muted">
+                            Uncategorized
+                        </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <small class="text-muted d-block">
+                            Status
+                        </small>
+
+                        {% if sign.status == "active" %}
+
+                        <span class="badge bg-success
+                                     rounded-pill mt-1">
+
+                            <i class="bi bi-check-circle me-1"></i>
+                            Active
+
+                        </span>
+
+                        {% else %}
+
+                        <span class="badge bg-secondary
+                                     rounded-pill mt-1">
+
+                            <i class="bi bi-pause-circle me-1"></i>
+                            Inactive
+
+                        </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div>
+
+                        <small class="text-muted d-block">
+                            Video
+                        </small>
+
+                        {% if sign.video_filename %}
+
+                        <span class="badge bg-success
+                                     rounded-pill mt-1">
+
+                            <i class="bi bi-camera-video me-1"></i>
+                            Available
+
+                        </span>
+
+                        {% else %}
+
+                        <span class="badge bg-warning
+                                     text-dark rounded-pill mt-1">
+
+                            <i class="bi bi-camera-video-off me-1"></i>
+                            No Video
+
+                        </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- EDITING TIPS -->
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-body p-4">
+
+                    <h5 class="fw-bold mb-3">
+
+                        <i class="bi bi-lightbulb-fill
+                                  text-warning me-2"></i>
+
+                        Editing Tips
+
+                    </h5>
+
+
+                    <ul class="list-unstyled mb-0">
+
+                        <li class="mb-3">
+
+                            <i class="bi bi-check-circle-fill
+                                      text-success me-2"></i>
+
+                            Keep the sign word clear and consistent.
+
+                        </li>
+
+
+                        <li class="mb-3">
+
+                            <i class="bi bi-check-circle-fill
+                                      text-success me-2"></i>
+
+                            Keep the meaning accurate.
+
+                        </li>
+
+
+                        <li class="mb-3">
+
+                            <i class="bi bi-check-circle-fill
+                                      text-success me-2"></i>
+
+                            Use the correct dictionary category.
+
+                        </li>
+
+
+                        <li>
+
+                            <i class="bi bi-check-circle-fill
+                                      text-success me-2"></i>
+
+                            Replace the video only when necessary.
+
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

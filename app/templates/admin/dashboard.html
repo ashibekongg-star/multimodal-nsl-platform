@@ -1,0 +1,879 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block admin_content %}
+
+<div class="container-fluid">
+
+    <!-- =====================================================
+         DASHBOARD HEADER
+    ====================================================== -->
+
+    <div class="d-flex flex-wrap justify-content-between
+                align-items-center gap-3 mb-4">
+
+        <div>
+            <h2 class="fw-bold mb-1">
+                <i class="bi bi-speedometer2 text-primary me-2"></i>
+                Dashboard
+            </h2>
+
+            <p class="text-muted mb-0">
+                Welcome to the NSL Connect Administration.
+            </p>
+        </div>
+
+        <span class="badge bg-primary rounded-pill px-3 py-2 fs-6">
+            <i class="bi bi-shield-check me-1"></i>
+            Administrator
+        </span>
+
+    </div>
+
+
+    <!-- =====================================================
+         STATISTICS
+    ====================================================== -->
+
+    <div class="row g-4 mb-4">
+
+        <!-- TOTAL CATEGORIES -->
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="card border-0 shadow-sm rounded-4
+                        h-100 dashboard-stat-card">
+
+                <div class="card-body p-4">
+
+                    <div class="d-flex justify-content-between
+                                align-items-start">
+
+                        <div>
+                            <p class="text-muted mb-2">
+                                Total Categories
+                            </p>
+
+                            <h2 class="fw-bold mb-1 text-primary">
+                                {{ total_categories }}
+                            </h2>
+
+                            <small class="text-muted">
+                                Dictionary
+                            </small>
+                        </div>
+
+                        <div class="bg-primary bg-opacity-10
+                                    rounded-circle p-3">
+
+                            <i class="bi bi-folder-fill
+                                      text-primary fs-3"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- TOTAL SIGNS -->
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="card border-0 shadow-sm rounded-4
+                        h-100 dashboard-stat-card">
+
+                <div class="card-body p-4">
+
+                    <div class="d-flex justify-content-between
+                                align-items-start">
+
+                        <div>
+                            <p class="text-muted mb-2">
+                                Total Signs
+                            </p>
+
+                            <h2 class="fw-bold mb-1 text-success">
+                                {{ total_signs }}
+                            </h2>
+
+                            <small class="text-muted">
+                                NSL vocabulary
+                            </small>
+                        </div>
+
+                        <div class="bg-success bg-opacity-10
+                                    rounded-circle p-3">
+
+                            <i class="bi bi-hand-index-thumb-fill
+                                      text-success fs-3"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- TOTAL VIDEOS -->
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="card border-0 shadow-sm rounded-4
+                        h-100 dashboard-stat-card">
+
+                <div class="card-body p-4">
+
+                    <div class="d-flex justify-content-between
+                                align-items-start">
+
+                        <div>
+                            <p class="text-muted mb-2">
+                                Total Videos
+                            </p>
+
+                            <h2 class="fw-bold mb-1 text-warning">
+                                {{ total_videos }}
+                            </h2>
+
+                            <small class="text-muted">
+                                Uploaded sign videos
+                            </small>
+                        </div>
+
+                        <div class="bg-warning bg-opacity-10
+                                    rounded-circle p-3">
+
+                            <i class="bi bi-camera-video-fill
+                                      text-warning fs-3"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ACTIVE SIGNS -->
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="card border-0 shadow-sm rounded-4
+                        h-100 dashboard-stat-card">
+
+                <div class="card-body p-4">
+
+                    <div class="d-flex justify-content-between
+                                align-items-start">
+
+                        <div>
+                            <p class="text-muted mb-2">
+                                Active Signs
+                            </p>
+
+                            <h2 class="fw-bold mb-1 text-info">
+                                {{ active_signs }}
+                            </h2>
+
+                            <small class="text-muted">
+                                Available
+                            </small>
+                        </div>
+
+                        <div class="bg-info bg-opacity-10
+                                    rounded-circle p-3">
+
+                            <i class="bi bi-check-circle-fill
+                                      text-info fs-3"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- INACTIVE SIGNS -->
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="card border-0 shadow-sm rounded-4
+                        h-100 dashboard-stat-card">
+
+                <div class="card-body p-4">
+
+                    <div class="d-flex justify-content-between
+                                align-items-start">
+
+                        <div>
+                            <p class="text-muted mb-2">
+                                Inactive Signs
+                            </p>
+
+                            <h2 class="fw-bold mb-1 text-danger">
+                                {{ inactive_signs }}
+                            </h2>
+
+                            <small class="text-muted">
+                                Disabled
+                            </small>
+                        </div>
+
+                        <div class="bg-danger bg-opacity-10
+                                    rounded-circle p-3">
+
+                            <i class="bi bi-x-circle-fill
+                                      text-danger fs-3"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ACTIVE VIDEOS -->
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="card border-0 shadow-sm rounded-4
+                        h-100 dashboard-stat-card">
+
+                <div class="card-body p-4">
+
+                    <div class="d-flex justify-content-between
+                                align-items-start">
+
+                        <div>
+                            <p class="text-muted mb-2">
+                                Active Videos
+                            </p>
+
+                            <h2 class="fw-bold mb-1 text-success">
+                                {{ active_videos }}
+                            </h2>
+
+                            <small class="text-muted">
+                                Available
+                            </small>
+                        </div>
+
+                        <div class="bg-success bg-opacity-10
+                                    rounded-circle p-3">
+
+                            <i class="bi bi-play-circle-fill
+                                      text-success fs-3"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- INACTIVE VIDEOS -->
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="card border-0 shadow-sm rounded-4
+                        h-100 dashboard-stat-card">
+
+                <div class="card-body p-4">
+
+                    <div class="d-flex justify-content-between
+                                align-items-start">
+
+                        <div>
+                            <p class="text-muted mb-2">
+                                Inactive Videos
+                            </p>
+
+                            <h2 class="fw-bold mb-1 text-secondary">
+                                {{ inactive_videos }}
+                            </h2>
+
+                            <small class="text-muted">
+                                Disabled
+                            </small>
+                        </div>
+
+                        <div class="bg-secondary bg-opacity-10
+                                    rounded-circle p-3">
+
+                            <i class="bi bi-pause-circle-fill
+                                      text-secondary fs-3"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         QUICK ACTIONS
+    ====================================================== -->
+
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+        <div class="card-body p-4">
+
+            <div class="d-flex flex-wrap justify-content-between
+                        align-items-center gap-2 mb-3">
+
+                <div>
+                    <h5 class="fw-bold mb-1">
+                        <i class="bi bi-lightning-charge-fill
+                                  text-warning me-2"></i>
+                        Quick Actions
+                    </h5>
+
+                    <small class="text-muted">
+                        Frequently used administration tools
+                    </small>
+                </div>
+
+            </div>
+
+
+            <div class="row g-3">
+
+                <!-- ADD SIGN -->
+
+                <div class="col-xl-3 col-md-6">
+
+                    <a href="{{ url_for('admin.add_sign') }}"
+                       class="btn btn-success w-100 py-3 rounded-3">
+
+                        <i class="bi bi-plus-circle-fill
+                                  fs-5 me-2"></i>
+
+                        Add New Sign
+
+                    </a>
+
+                </div>
+
+
+                <!-- MANAGE SIGNS -->
+
+                <div class="col-xl-3 col-md-6">
+
+                    <a href="{{ url_for('admin.signs') }}"
+                       class="btn btn-primary w-100 py-3 rounded-3">
+
+                        <i class="bi bi-list-ul
+                                  fs-5 me-2"></i>
+
+                        Manage Signs
+
+                    </a>
+
+                </div>
+
+
+                <!-- MANAGE VIDEOS -->
+
+                <div class="col-xl-3 col-md-6">
+
+                    <a href="{{ url_for('admin.videos') }}"
+                       class="btn btn-outline-success
+                              w-100 py-3 rounded-3">
+
+                        <i class="bi bi-camera-video
+                                  fs-5 me-2"></i>
+
+                        Manage Videos
+
+                    </a>
+
+                </div>
+
+
+                <!-- ADD CATEGORY -->
+
+                <div class="col-xl-3 col-md-6">
+
+                    <a href="{{ url_for('admin.add_category') }}"
+                       class="btn btn-outline-primary
+                              w-100 py-3 rounded-3">
+
+                        <i class="bi bi-folder-plus
+                                  fs-5 me-2"></i>
+
+                        Add Category
+
+                    </a>
+
+                </div>
+
+
+                <!-- MANAGE USERS -->
+
+                <div class="col-xl-3 col-md-6">
+
+                    <a href="{{ url_for('admin.users') }}"
+                       class="btn btn-outline-info
+                              w-100 py-3 rounded-3">
+
+                        <i class="bi bi-people
+                                  fs-5 me-2"></i>
+
+                        Manage Users
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         CHARTS
+    ====================================================== -->
+
+    <div class="row g-4 mb-4">
+
+        <!-- OVERVIEW CHART -->
+
+        <div class="col-xl-8">
+
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                <div class="card-header bg-white border-0
+                            pt-4 px-4">
+
+                    <h5 class="fw-bold mb-1">
+                        <i class="bi bi-bar-chart-fill
+                                  text-primary me-2"></i>
+                        NSL Collection Overview
+                    </h5>
+
+                    <small class="text-muted">
+                        Current dictionary statistics
+                    </small>
+
+                </div>
+
+                <div class="card-body" style="height: 350px;">
+
+                    <canvas id="overviewChart"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- STATUS CHART -->
+
+        <div class="col-xl-4">
+
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                <div class="card-header bg-white border-0
+                            pt-4 px-4">
+
+                    <h5 class="fw-bold mb-1">
+                        <i class="bi bi-pie-chart-fill
+                                  text-success me-2"></i>
+                        Sign and Video Status
+                    </h5>
+
+                    <small class="text-muted">
+                        Active versus inactive signs and videos
+                    </small>
+
+                </div>
+
+                <div class="card-body" style="height: 350px;">
+
+                    <canvas id="statusChart"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SYSTEM STATUS
+    ====================================================== -->
+
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+        <div class="card-header bg-white border-0 pt-4 px-4">
+
+            <h5 class="fw-bold mb-1">
+                <i class="bi bi-activity text-primary me-2"></i>
+                System Status
+            </h5>
+
+            <small class="text-muted">
+                Current status of major NSL Connect components
+            </small>
+
+        </div>
+
+        <div class="card-body px-4">
+
+            <div class="row g-3">
+
+                <!-- DATABASE -->
+
+                <div class="col-md-6 col-xl-3">
+
+                    <div class="border rounded-4 p-3 h-100">
+
+                        <div class="d-flex justify-content-between
+                                    align-items-center gap-2">
+
+                            <span>
+                                <i class="bi bi-database-fill
+                                          text-primary me-2"></i>
+                                Database
+                            </span>
+
+                            <span class="badge bg-success rounded-pill">
+                                Online
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DICTIONARY -->
+
+                <div class="col-md-6 col-xl-3">
+
+                    <div class="border rounded-4 p-3 h-100">
+
+                        <div class="d-flex justify-content-between
+                                    align-items-center gap-2">
+
+                            <span>
+                                <i class="bi bi-book-fill
+                                          text-primary me-2"></i>
+                                Dictionary
+                            </span>
+
+                            <span class="badge bg-success rounded-pill">
+                                Active
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SPEECH TRANSLATION -->
+
+                <div class="col-md-6 col-xl-3">
+
+                    <div class="border rounded-4 p-3 h-100">
+
+                        <div class="d-flex justify-content-between
+                                    align-items-center gap-2">
+
+                            <span>
+                                <i class="bi bi-mic-fill
+                                          text-danger me-2"></i>
+                                Speech Translation
+                            </span>
+
+                            <span class="badge bg-success rounded-pill">
+                                Running
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- VIDEO LIBRARY -->
+
+                <div class="col-md-6 col-xl-3">
+
+                    <div class="border rounded-4 p-3 h-100">
+
+                        <div class="d-flex justify-content-between
+                                    align-items-center gap-2">
+
+                            <span>
+                                <i class="bi bi-camera-video-fill
+                                          text-success me-2"></i>
+                                Video Library
+                            </span>
+
+                            <span class="badge bg-primary rounded-pill">
+                                Ready
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SUMMARY
+    ====================================================== -->
+
+    <div class="alert alert-primary border-0 rounded-4 shadow-sm">
+
+        <div class="d-flex align-items-start">
+
+            <i class="bi bi-info-circle-fill fs-4 me-3"></i>
+
+            <div>
+
+                <strong>NSL Dictionary Summary</strong>
+
+                <div class="small mt-1">
+
+                    The system currently contains
+                    <strong>{{ total_signs }}</strong>
+                    sign(s) across
+                    <strong>{{ total_categories }}</strong>
+                    categor{{ 'y' if total_categories == 1 else 'ies' }}.
+
+                    <strong>{{ active_signs }}</strong>
+                    sign(s) are active, with
+                    <strong>{{ total_videos }}</strong>
+                    video(s) uploaded.
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script>
+
+/* ==========================================================
+   OVERVIEW BAR CHART
+========================================================== */
+
+const overviewChart =
+    document.getElementById("overviewChart");
+
+if (overviewChart && typeof Chart !== "undefined") {
+
+    new Chart(overviewChart, {
+
+        type: "bar",
+
+        data: {
+
+            labels: [
+                "Categories",
+                "Total Signs",
+                "Total Videos",
+                "Active Signs",
+                "Inactive Signs",
+                "Active Videos",
+                "Inactive Videos"
+            ],
+
+            datasets: [{
+
+                label: "NSL Statistics",
+
+                data: [
+                    {{ total_categories }},
+                    {{ total_signs }},
+                    {{ total_videos }},
+                    {{ active_signs }},
+                    {{ inactive_signs }},
+                    {{ active_videos }},
+                    {{ inactive_videos }}
+                ],
+
+                backgroundColor: [
+                    "#0d6efd",
+                    "#198754",
+                    "#ffc107",
+                    "#0dcaf0",
+                    "#dc3545",
+                    "#20c997",
+                    "#6c757d"
+                ],
+
+                borderRadius: 8,
+
+                borderSkipped: false
+
+            }]
+
+        },
+
+        options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            plugins: {
+
+                legend: {
+                    display: false
+                }
+
+            },
+
+            scales: {
+
+                y: {
+
+                    beginAtZero: true,
+
+                    ticks: {
+                        precision: 0
+                    }
+
+                }
+
+            }
+
+        }
+
+    });
+
+}
+
+
+/* ==========================================================
+   STATUS DOUGHNUT
+========================================================== */
+
+const statusChart =
+    document.getElementById("statusChart");
+
+if (statusChart && typeof Chart !== "undefined") {
+
+    new Chart(statusChart, {
+
+        type: "doughnut",
+
+        data: {
+
+            labels: [
+                "Active Signs",
+                "Inactive Signs",
+                "Active Videos",
+                "Inactive Videos"
+            ],
+
+            datasets: [{
+
+                data: [
+                    {{ active_signs }},
+                    {{ inactive_signs }},
+                    {{ active_videos }},
+                    {{ inactive_videos }}
+                ],
+
+                backgroundColor: [
+                    "#198754",
+                    "#dc3545",
+                    "#20c997",
+                    "#6c757d"
+                ],
+
+                borderWidth: 0
+
+            }]
+
+        },
+
+        options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            cutout: "65%",
+
+            plugins: {
+
+                legend: {
+
+                    position: "bottom"
+
+                }
+
+            }
+
+        }
+
+    });
+
+}
+
+</script>
+
+{% endblock %}

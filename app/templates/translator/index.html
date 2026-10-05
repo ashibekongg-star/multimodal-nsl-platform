@@ -1,0 +1,208 @@
+{% extends "base.html" %}
+
+{% block title %}
+Text → Nigerian Sign Language Translator
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-4">
+
+    <!-- Title -->
+
+    <div class="text-center mb-5">
+
+        <h1 class="fw-bold">
+
+            Text → Nigerian Sign Language Translator
+
+        </h1>
+
+        <p class="text-muted">
+
+            Enter English text below to translate it into Nigerian Sign Language.
+
+        </p>
+
+    </div>
+
+    <div class="row g-4">
+
+        <!-- LEFT SIDE -->
+
+        <div class="col-lg-5">
+
+            <div class="card shadow-sm">
+
+                <div class="card-body">
+
+                    <form method="POST">
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-bold">
+
+                                Enter Text
+
+                            </label>
+
+                            <textarea
+                                name="text"
+                                rows="8"
+                                class="form-control"
+                                placeholder="Example: Hello teacher father">{{ query }}</textarea>
+
+                        </div>
+
+                        <button
+                            class="btn btn-primary"
+                            type="submit">
+
+                            Translate
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+            {% if unknown_words %}
+
+            <div class="alert alert-warning shadow-sm mt-3">
+
+                <strong>
+
+                    Words not found:
+
+                </strong>
+
+                {{ unknown_words|join(", ") }}
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+        <!-- RIGHT SIDE -->
+
+        <div class="col-lg-7">
+
+            {% if matched_signs %}
+
+            <div class="card shadow-sm">
+
+                <div class="card-header bg-primary text-white">
+
+                    <h4 class="mb-0">
+
+                        Nigerian Sign Language
+
+                    </h4>
+
+                </div>
+
+                <div class="card-body">
+
+                    <video
+                        id="translatorVideo"
+                        class="w-100 rounded"
+                        controls
+                        autoplay
+                        preload="metadata">
+
+                        Your browser does not support HTML5 video.
+
+                    </video>
+
+                </div>
+
+            </div>
+
+            {% else %}
+
+            <div class="card shadow-sm">
+
+                <div class="card-header bg-primary text-white">
+
+                    <h4 class="mb-0">
+
+                        Nigerian Sign Language
+
+                    </h4>
+
+                </div>
+
+                <div class="card-body text-center py-5">
+
+                    <h5 class="text-muted">
+
+                        Translation video will appear here.
+
+                    </h5>
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% if matched_signs %}
+
+<script>
+
+const playlist = [
+
+{% for sign in matched_signs %}
+
+{
+    video: "{{ url_for('static', filename='videos/' + sign.video_filename) }}"
+},
+
+{% endfor %}
+
+];
+
+let current = 0;
+
+const player = document.getElementById("translatorVideo");
+
+function playVideo(index){
+
+    if(index >= playlist.length){
+
+        return;
+
+    }
+
+    player.src = playlist[index].video;
+
+    player.load();
+
+    player.play();
+
+}
+
+player.addEventListener("ended", function(){
+
+    current++;
+
+    playVideo(current);
+
+});
+
+playVideo(0);
+
+</script>
+
+{% endif %}
+
+{% endblock %}

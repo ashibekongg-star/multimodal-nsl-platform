@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+
+{% block title %}
+Speech → Nigerian Sign Language
+{% endblock %}
+
+{% block content %}
+
+<!-- Hero -->
+<div class="row align-items-center mb-5">
+
+    <div class="col-lg-12">
+
+        <span class="badge bg-light text-primary px-3 py-2 mb-3">
+            AI Translation Service
+        </span>
+
+        <h1 class="display-5 fw-bold">
+            Speech → Nigerian Sign Language
+        </h1>
+
+        <p class="lead mt-3">
+            Speak naturally and NSL Connect translates your speech into
+            Nigerian Sign Language.
+        </p>
+
+    </div>
+
+</div>
+
+<div class="row g-4">
+
+    <!-- LEFT PANEL -->
+    <div class="col-lg-4">
+
+        <div class="card shadow border-0">
+
+            <div class="card-body">
+
+                <div class="text-center mb-4">
+
+                    <img
+                        id="startBtn"
+                        src="{{ url_for('static', filename='images/microphone_button.png') }}"
+                        class="img-fluid"
+                        style="max-width:120px;cursor:pointer;">
+
+                    <h4 class="fw-bold mt-3">
+                        Tap to Speak
+                    </h4>
+
+                    <p class="text-muted">
+                        Click the microphone and start speaking.
+                    </p>
+
+                </div>
+
+                <hr>
+
+                <h5 class="fw-bold">
+                    Speech Status
+                </h5>
+
+                <div id="statusBox" class="text-center p-3">
+
+                    Ready...
+
+                </div>
+
+                <hr>
+
+                <form id="speechForm" method="POST">
+
+                    <label class="form-label fw-bold">
+                        Recognized Speech
+                    </label>
+
+                    <textarea
+                        id="speechText"
+                        name="speech"
+                        class="form-control"
+                        rows="7"
+                        placeholder="Speech will appear here...">{{ recognized_text }}</textarea>
+
+                </form>
+
+                {% if unknown_words %}
+
+                <div class="alert alert-warning mt-3">
+
+                    <strong>Unknown Words:</strong>
+
+                    <br>
+
+                    {{ unknown_words|join(", ") }}
+
+                </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- RIGHT PANEL -->
+
+    <div class="col-lg-8">
+
+        <div class="card shadow border-0">
+
+            <div class="card-header bg-primary text-white">
+
+                <h4 class="mb-0">
+                    Nigerian Sign Language
+                </h4>
+
+            </div>
+
+            <div class="card-body text-center">
+
+                {% if matched_signs %}
+
+                <video
+                    id="translatorVideo"
+                    class="w-100 rounded shadow"
+                    controls
+                    playsinline
+                    preload="auto">
+
+                    Your browser does not support HTML5 video.
+
+                </video>
+
+                <script>
+
+                    const videoQueue = [
+
+                    {% for file in video_files %}
+
+                    "{{ url_for('static', filename='videos/' + file) }}",
+
+                    {% endfor %}
+
+                    ];
+
+                    console.log("VIDEO FILES FROM FLASK");
+                    console.log(videoQueue);
+
+                </script>
+
+                {% else %}
+
+                <div class="py-5">
+
+                    <div style="font-size:90px;">
+                        🎥
+                    </div>
+
+                    <h2 class="fw-bold text-primary mt-3">
+                        Ready for Translation
+                    </h2>
+
+                    <p class="text-muted">
+
+                        Your Nigerian Sign Language translation
+                        will appear here after speech recognition.
+
+                    </p>
+
+                </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script src="{{ url_for('static', filename='js/speech.js') }}"></script>
+
+{% endblock %}

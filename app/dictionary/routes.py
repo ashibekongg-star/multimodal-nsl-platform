@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, jsonify
 
 from app.models.category import Category
 from app.models.sign import Sign
@@ -11,25 +11,34 @@ dictionary_bp = Blueprint(
 )
 
 
+# ==========================================
+# Dictionary Home
+# ==========================================
+
 @dictionary_bp.route("/")
 def categories():
-    """
-    Display all dictionary categories.
-    """
 
-    categories = Category.query.order_by(Category.name.asc()).all()
+    categories = (
+        Category.query
+        .order_by(Category.name.asc())
+        .all()
+    )
+
+    total_signs = Sign.query.count()
 
     return render_template(
         "dictionary/categories.html",
-        categories=categories
+        categories=categories,
+        total_signs=total_signs
     )
 
 
+# ==========================================
+# Category Page
+# ==========================================
+
 @dictionary_bp.route("/category/<int:category_id>")
 def category(category_id):
-    """
-    Display all signs belonging to one category.
-    """
 
     category = Category.query.get_or_404(category_id)
 
@@ -47,19 +56,37 @@ def category(category_id):
     )
 
 
+# ==========================================
+# Sign Details
+# ==========================================
+
 @dictionary_bp.route("/sign/<int:sign_id>")
 def sign(sign_id):
-    """
-    Display details of a single sign.
-    """
 
     sign = Sign.query.get_or_404(sign_id)
 
-    return render_template(
-        "dictionary/sign.html",
-        sign=sign
+    related_signs = (
+        Sign.query
+        .filter(
+            Sign.category_id == sign.category_id,
+            Sign.id != sign.id,
+            Sign.status == "active"
+        )
+        .order_by(Sign.word.asc())
+        .limit(6)
+        .all()
     )
 
+    return render_template(
+        "dictionary/sign.html",
+        sign=sign,
+        related_signs=related_signs
+    )
+
+
+# ==========================================
+# Search Page
+# ==========================================
 
 @dictionary_bp.route("/search")
 def search():
@@ -71,9 +98,8 @@ def search():
     if query:
 
         signs = (
-            Sign.query.filter(
-                Sign.word.ilike(f"%{query}%")
-            )
+            Sign.query
+            .filter(Sign.word.ilike(f"%{query}%"))
             .order_by(Sign.word.asc())
             .all()
         )
@@ -82,4 +108,37 @@ def search():
         "dictionary/search.html",
         query=query,
         signs=signs
+    )
+
+
+# ==========================================
+# Live Search API
+# ==========================================
+
+@dictionary_bp.route("/live-search")
+def live_search():
+
+    query = request.args.get("q", "").strip()
+
+    if not query:
+
+        return jsonify([])
+
+    signs = (
+        Sign.query
+        .filter(Sign.word.ilike(f"%{query}%"))
+        .order_by(Sign.word.asc())
+        .limit(8)
+        .all()
+    )
+
+    return jsonify(
+        [
+            {
+                "id": sign.id,
+                "word": sign.word,
+                "meaning": sign.meaning or ""
+            }
+            for sign in signs
+        ]
     )

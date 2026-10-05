@@ -1,0 +1,263 @@
+{% extends "base.html" %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+<!-- Hero -->
+
+<div class="hero-section">
+
+    <h1>
+        Welcome back, {{ current_user.full_name }} 👋
+    </h1>
+
+    <p>
+        Real-Time Multimodal Nigerian Sign Language Platform
+    </p>
+
+    <div class="mt-4">
+
+        <a href="{{ url_for('speech.index') }}"
+           class="btn btn-light btn-lg me-2">
+
+            <i class="bi bi-mic-fill"></i>
+            Speech → NSL
+
+        </a>
+
+        <a href="{{ url_for('translator.index') }}"
+           class="btn btn-warning btn-lg">
+
+            <i class="bi bi-chat-text-fill"></i>
+            Text → NSL
+
+        </a>
+
+    </div>
+
+</div>
+
+<!-- Statistics -->
+
+<div class="row g-4 mb-5">
+
+    <div class="col-lg-3">
+
+        <div class="card stat-card shadow-sm">
+
+            <div class="card-body text-center">
+
+                <i class="bi bi-hand-index-thumb-fill text-primary fs-1"></i>
+
+                <h2 class="mt-3 stat-counter"
+                    data-target="{{ sign_count }}">0</h2>
+
+                <p>Total Signs</p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-3">
+
+        <div class="card stat-card shadow-sm">
+
+            <div class="card-body text-center">
+
+                <i class="bi bi-folder-fill text-success fs-1"></i>
+
+                <h2 class="mt-3 stat-counter"
+                    data-target="{{ category_count }}">0</h2>
+
+                <p>Categories</p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-3">
+
+        <div class="card stat-card shadow-sm">
+
+            <div class="card-body text-center">
+
+                <i class="bi bi-camera-video-fill text-danger fs-1"></i>
+
+                <h2 class="mt-3 stat-counter"
+                    data-target="{{ video_count }}">0</h2>
+
+                <p>Videos</p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-3">
+
+        <div class="card stat-card shadow-sm">
+
+            <div class="card-body text-center">
+
+                <i class="bi bi-people-fill text-warning fs-1"></i>
+
+                <h2 class="mt-3 stat-counter"
+                    data-target="{{ user_count }}">0</h2>
+
+                <p>Users</p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Latest Signs -->
+
+<div class="card shadow">
+
+    <div class="card-header bg-white">
+
+        <h4 class="mb-0">
+
+            <i class="bi bi-clock-history"></i>
+
+            Latest Signs
+
+        </h4>
+
+    </div>
+
+    <div class="card-body">
+
+        {% if latest_signs %}
+
+        <table class="table table-hover">
+
+            <thead>
+
+                <tr>
+
+                    <th>Word</th>
+                    <th>Meaning</th>
+                    <th>Video</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for sign in latest_signs %}
+
+                <tr>
+
+                    <td>{{ sign.word }}</td>
+
+                    <td>{{ sign.meaning }}</td>
+
+                    <td>
+
+                        {% if sign.video_filename %}
+
+                        <span class="badge bg-success">
+                            Available
+                        </span>
+
+                        {% else %}
+
+                        <span class="badge bg-secondary">
+                            No Video
+                        </span>
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        {% else %}
+
+        <div class="text-center p-5">
+
+            <i class="bi bi-folder-x display-4 text-muted"></i>
+
+            <h4 class="mt-3">
+                No Signs Found
+            </h4>
+
+            <p class="text-muted">
+                Add your first sign from the Admin Dashboard.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const counters = document.querySelectorAll(".stat-counter");
+
+    counters.forEach(counter => {
+
+        const target = parseInt(counter.dataset.target) || 0;
+
+        let count = 0;
+
+        const speed = 40;
+
+        const increment = Math.max(1, Math.ceil(target / 80));
+
+        function updateCounter() {
+
+            count += increment;
+
+            if (count >= target) {
+
+                counter.innerText = target;
+
+                return;
+
+            }
+
+            counter.innerText = count;
+
+            setTimeout(updateCounter, speed);
+
+        }
+
+        updateCounter();
+
+    });
+
+});
+
+</script>
+
+{% endblock %}

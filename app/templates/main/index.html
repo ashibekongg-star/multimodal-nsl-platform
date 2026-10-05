@@ -1,0 +1,368 @@
+{% extends "base.html" %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- ===================== PAGE HEADER ===================== -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+                Welcome to NSL Connect
+            </h2>
+
+            <p class="text-muted mb-0">
+                Nigerian Sign Language Translation Platform Dashboard
+            </p>
+
+        </div>
+
+        <a href="{{ url_for('speech.index') }}"
+           class="btn btn-primary shadow">
+
+            <i class="bi bi-mic-fill"></i>
+
+            Start Translation
+
+        </a>
+
+    </div>
+
+    <!-- ===================== STATISTICS ===================== -->
+
+    <div class="row g-4">
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card shadow border-0 stat-card">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <small class="text-muted">
+                                Total Signs
+                            </small>
+
+                            <h1 class="fw-bold text-dark">
+                                {{ total_signs }}
+                            </h1>
+
+                        </div>
+
+                        <i class="bi bi-hand-index-thumb-fill
+                                  text-primary fs-1"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card shadow border-0 stat-card">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <small class="text-muted">
+                                Categories
+                            </small>
+
+                            <h1 class="fw-bold text-dark">
+                                {{ total_categories }}
+                            </h1>
+
+                        </div>
+
+                        <i class="bi bi-collection-fill
+                                  text-success fs-1"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card shadow border-0 stat-card">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <small class="text-muted">
+                                Users
+                            </small>
+
+                            <h1 class="fw-bold text-dark">
+                                {{ total_users }}
+                            </h1>
+
+                        </div>
+
+                        <i class="bi bi-people-fill
+                                  text-warning fs-1"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card shadow border-0 stat-card">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <small class="text-muted">
+                                Videos
+                            </small>
+
+                            <h1 class="fw-bold text-dark">
+                                {{ total_videos }}
+                            </h1>
+
+                        </div>
+
+                        <i class="bi bi-camera-video-fill
+                                  text-danger fs-1"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ===================== SECOND ROW ===================== -->
+
+    <div class="row mt-5 g-4">
+
+        <!-- QUICK ACTIONS -->
+
+        <div class="col-lg-6">
+
+            <div class="card shadow border-0">
+
+                <div class="card-header bg-light text-dark border-bottom">
+                    <h5 class="mb-0">
+
+                        Quick Actions
+
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row g-3">
+
+                        <div class="col-6">
+
+                            <a href="{{ url_for('speech.index') }}"
+                               class="btn btn-outline-secondary w-100 p-4">
+                                <i class="bi bi-mic-fill fs-1"></i>
+
+                                <br><br>
+
+                                Speech → NSL
+
+                            </a>
+
+                        </div>
+
+                        <div class="col-6">
+
+                            <a href="{{ url_for('translator.index') }}"
+                               class="btn btn-outline-secondary w-100 p-4">
+                                <i class="bi bi-chat-square-text-fill fs-1"></i>
+
+                                <br><br>
+
+                                Text → NSL
+
+                            </a>
+
+                        </div>
+
+                        <div class="col-6">
+
+                            <a href="{{ url_for('dictionary.categories') }}"
+                               class="btn btn-outline-secondary w-100 p-4">
+                                <i class="bi bi-book-fill fs-1"></i>
+
+                                <br><br>
+
+                                Dictionary
+
+                            </a>
+
+                        </div>
+
+                        <div class="col-6">
+
+                            <a href="{{ url_for('admin.dashboard') }}"
+                               class="btn btn-outline-secondary w-100 p-4">
+                                <i class="bi bi-gear-fill fs-1"></i>
+
+                                <br><br>
+
+                                Administration
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- CHART -->
+
+        <div class="col-lg-6">
+
+            <div class="card shadow border-0">
+
+                <div class="card-header bg-light text-dark border-bottom">
+
+                    <h5 class="mb-0">
+
+                        Platform Statistics
+
+                    </h5>
+
+                </div>
+
+                <div style="height:320px;">
+                    <canvas id="dashboardChart"></canvas>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+const ctx = document.getElementById("dashboardChart");
+
+if (ctx) {
+
+    new Chart(ctx, {
+
+        type: "bar",
+
+        data: {
+
+            labels: [
+
+                "Signs",
+
+                "Categories",
+
+                "Users",
+
+                "Videos"
+
+            ],
+
+            datasets: [{
+
+                label: "NSL Platform",
+
+                data: [
+                    {{ total_signs }},
+                    {{ total_categories }},
+                    {{ total_users }},
+                    {{ total_videos }}
+                ],
+
+                backgroundColor: [
+                    "#0d6efd",
+                    "#198754",
+                    "#ffc107",
+                    "#dc3545"
+                ],
+
+                borderRadius: 10,
+                borderWidth: 1
+
+            }]
+
+        },
+
+        options: {
+
+            responsive: true,
+            maintainAspectRatio: false,
+
+            plugins: {
+
+                legend: {
+
+                    display: false
+
+                }
+
+            },
+
+            scales: {
+
+                y: {
+
+                    beginAtZero: true
+
+                }
+
+            }
+
+        }
+
+    });
+
+}
+
+</script>
+
+{% endblock %}

@@ -1,90 +1,409 @@
 {% extends "base.html" %}
 
 {% block title %}
-Search Dictionary
+Search Nigerian Sign Language Dictionary
 {% endblock %}
 
 {% block content %}
 
-<h1>Search Dictionary</h1>
+<div class="container-fluid">
 
-<form method="GET">
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
 
-    <div class="mb-3">
+    <div class="hero-section mb-5">
 
-        <input
-            type="text"
-            name="q"
-            class="form-control"
-            placeholder="Search for a sign..."
-            value="{{ query }}">
+        <div class="row align-items-center">
 
-    </div>
+            <div class="col-lg-8">
 
-    <button
-        type="submit"
-        class="btn btn-primary">
+                <span class="badge bg-light text-primary
+                             px-3 py-2 mb-3">
 
-        Search
+                    🇳🇬 Nigerian Sign Language
 
-    </button>
+                </span>
 
-</form>
+                <h1 class="display-5 fw-bold">
 
-{% if query %}
+                    Search NSL Dictionary
 
-<hr>
+                </h1>
 
-<h3>Search Results</h3>
+                <p class="lead mb-0">
 
-{% if signs %}
+                    Search for Nigerian Sign Language words,
+                    meanings and available video demonstrations.
 
-    {% for sign in signs %}
+                </p>
 
-    <div class="card mt-3">
+            </div>
 
-        <div class="card-body">
 
-            <h4>
+            <div class="col-lg-4 text-center">
 
-                <a href="{{ url_for('dictionary.sign', sign_id=sign.id) }}">
+                <i
+                    class="bi bi-search"
+                    style="font-size: 90px;">
+                </i>
 
-                    {{ sign.word }}
-
-                </a>
-
-            </h4>
-
-            <p>
-
-                <strong>Category:</strong>
-
-                {{ sign.category.name }}
-
-            </p>
-
-            <p>
-
-                {{ sign.meaning }}
-
-            </p>
+            </div>
 
         </div>
 
     </div>
 
-    {% endfor %}
 
-{% else %}
+    <!-- =====================================================
+         SEARCH BOX
+    ====================================================== -->
 
-<div class="alert alert-warning mt-3">
+    <div class="card border-0 shadow-sm rounded-4 mb-5">
 
-    No signs found for "<strong>{{ query }}</strong>".
+        <div class="card-body p-4">
+
+            <form method="GET"
+                  action="{{ url_for('dictionary.search') }}">
+
+                <div class="input-group input-group-lg">
+
+                    <span class="input-group-text bg-white">
+
+                        <i class="bi bi-search text-primary"></i>
+
+                    </span>
+
+
+                    <input
+                        type="text"
+                        name="q"
+                        class="form-control"
+                        placeholder="Search for a sign, meaning or word..."
+                        value="{{ query }}"
+                        autocomplete="off">
+
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary px-4">
+
+                        <i class="bi bi-search me-2"></i>
+
+                        Search
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SEARCH RESULTS
+    ====================================================== -->
+
+    {% if query %}
+
+    <div class="d-flex justify-content-between
+                align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold mb-1">
+
+                Search Results
+
+            </h2>
+
+            <p class="text-muted mb-0">
+
+                Results for:
+
+                <strong>
+                    "{{ query }}"
+                </strong>
+
+            </p>
+
+        </div>
+
+
+        {% if signs %}
+
+        <span class="badge bg-primary fs-6 px-3 py-2">
+
+            {{ signs|length }} Result(s)
+
+        </span>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- =====================================================
+         RESULTS
+    ====================================================== -->
+
+    {% if signs %}
+
+    <div class="row g-4">
+
+        {% for sign in signs %}
+
+        <div class="col-md-6 col-lg-4">
+
+            <div
+                class="card border-0 shadow-sm
+                       rounded-4 h-100 overflow-hidden">
+
+
+                <!-- CARD HEADER -->
+
+                <div
+                    class="bg-primary text-white
+                           text-center py-4">
+
+                    <i
+                        class="bi bi-hand-index-thumb-fill"
+                        style="font-size: 55px;">
+                    </i>
+
+                </div>
+
+
+                <!-- CARD BODY -->
+
+                <div class="card-body p-4">
+
+                    <h3 class="fw-bold">
+
+                        {{ sign.word }}
+
+                    </h3>
+
+
+                    <!-- Category -->
+
+                    <div class="mb-3">
+
+                        <span
+                            class="badge bg-primary
+                                   rounded-pill px-3 py-2">
+
+                            <i class="bi bi-folder-fill me-1"></i>
+
+                            {{ sign.category.name }}
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- Meaning -->
+
+                    <p class="text-muted">
+
+                        {{ sign.meaning
+                           or "No meaning available." }}
+
+                    </p>
+
+
+                    <!-- Video Status -->
+
+                    {% if sign.video_filename %}
+
+                    <span
+                        class="badge bg-success
+                               rounded-pill px-3 py-2 mb-3">
+
+                        <i
+                            class="bi bi-camera-video-fill me-1">
+                        </i>
+
+                        Video Available
+
+                    </span>
+
+                    {% else %}
+
+                    <span
+                        class="badge bg-secondary
+                               rounded-pill px-3 py-2 mb-3">
+
+                        <i
+                            class="bi bi-camera-video-off-fill me-1">
+                        </i>
+
+                        No Video
+
+                    </span>
+
+                    {% endif %}
+
+
+                    <!-- View Sign -->
+
+                    <a
+                        href="{{ url_for(
+                            'dictionary.sign',
+                            sign_id=sign.id
+                        ) }}"
+                        class="btn btn-primary
+                               rounded-pill w-100 mt-3">
+
+                        <i
+                            class="bi bi-play-circle-fill me-2">
+                        </i>
+
+                        View Sign
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+
+    {% else %}
+
+    <!-- =====================================================
+         NO RESULTS
+    ====================================================== -->
+
+    <div
+        class="card border-0 shadow-sm
+               rounded-4 text-center p-5">
+
+        <div class="card-body">
+
+            <i
+                class="bi bi-search display-1 text-muted">
+            </i>
+
+
+            <h3 class="fw-bold mt-4">
+
+                No Signs Found
+
+            </h3>
+
+
+            <p class="text-muted">
+
+                We could not find any Nigerian Sign Language
+                signs matching:
+
+                <strong>"{{ query }}"</strong>
+
+            </p>
+
+
+            <p class="text-muted">
+
+                Try another word or search term.
+
+            </p>
+
+
+            <a
+                href="{{ url_for('dictionary.categories') }}"
+                class="btn btn-primary rounded-pill px-4 mt-3">
+
+                <i class="bi bi-grid-3x3-gap-fill me-2"></i>
+
+                Browse Categories
+
+            </a>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+
+    {% else %}
+
+    <!-- =====================================================
+         BEFORE SEARCH
+    ====================================================== -->
+
+    <div
+        class="card border-0 shadow-sm
+               rounded-4 text-center p-5">
+
+        <div class="card-body">
+
+            <i
+                class="bi bi-search display-1 text-primary">
+            </i>
+
+
+            <h3 class="fw-bold mt-4">
+
+                Search the NSL Dictionary
+
+            </h3>
+
+
+            <p class="text-muted">
+
+                Enter a Nigerian Sign Language word,
+                meaning or phrase above to begin.
+
+            </p>
+
+
+            <a
+                href="{{ url_for('dictionary.categories') }}"
+                class="btn btn-outline-primary
+                       rounded-pill px-4 mt-3">
+
+                <i class="bi bi-folder-fill me-2"></i>
+
+                Browse Categories
+
+            </a>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         BACK TO DICTIONARY
+    ====================================================== -->
+
+    <div class="text-center mt-5 mb-4">
+
+        <a
+            href="{{ url_for('dictionary.categories') }}"
+            class="btn btn-outline-primary
+                   btn-lg rounded-pill">
+
+            <i class="bi bi-arrow-left me-2"></i>
+
+            Back to Dictionary
+
+        </a>
+
+    </div>
 
 </div>
-
-{% endif %}
-
-{% endif %}
 
 {% endblock %}

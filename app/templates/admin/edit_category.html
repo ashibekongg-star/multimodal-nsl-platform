@@ -1,0 +1,246 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}
+Delete Category
+{% endblock %}
+
+{% block admin_content %}
+
+<!-- Hero -->
+
+<div class="hero-section mb-5">
+
+    <div class="row align-items-center">
+
+        <div class="col-lg-8">
+
+            <span class="badge bg-light text-danger px-3 py-2 mb-3">
+
+                NSL Connect Administration
+
+            </span>
+
+            <h1 class="display-5 fw-bold">
+
+                Delete Category
+
+            </h1>
+
+            <p class="lead">
+
+                You are about to permanently remove this category from the
+                Nigerian Sign Language Dictionary.
+
+            </p>
+
+        </div>
+
+        <div class="col-lg-4 text-center">
+
+            <div style="font-size:90px;">
+
+                🗑️
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="row justify-content-center">
+
+    <div class="col-lg-8">
+
+        <div class="card shadow-sm border-0">
+
+            <div class="card-header bg-danger text-white">
+
+                <h4 class="mb-0">
+
+                    Category Information
+
+                </h4>
+
+            </div>
+
+            <div class="card-body p-4">
+
+                <table class="table table-bordered align-middle">
+
+                    <tr>
+
+                        <th width="200">
+
+                            Category Name
+
+                        </th>
+
+                        <td>
+
+                            <strong>
+
+                                {{ category.name }}
+
+                            </strong>
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <th>
+
+                            Description
+
+                        </th>
+
+                        <td>
+
+                            {{ category.description or "No description available." }}
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <th>
+
+                            Created
+
+                        </th>
+
+                        <td>
+
+                            {{ category.created_at.strftime("%d %B %Y") }}
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <th>
+
+                            Number of Signs
+
+                        </th>
+
+                        <td>
+
+                            <span class="badge bg-primary">
+
+                                {{ category.signs|length }}
+
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+                </table>
+
+                {% if category.signs|length > 0 %}
+
+                <div class="alert alert-warning mt-4">
+
+                    <h5>
+
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+
+                        Cannot Delete
+
+                    </h5>
+
+                    <p class="mb-0">
+
+                        This category still contains
+
+                        <strong>
+
+                            {{ category.signs|length }}
+
+                        </strong>
+
+                        sign(s).
+
+                        Remove or move all signs before deleting this category.
+
+                    </p>
+
+                </div>
+
+                <div class="d-grid">
+
+                    <a
+                        href="{{ url_for('admin.categories') }}"
+                        class="btn btn-secondary btn-lg rounded-pill">
+
+                        Back to Categories
+
+                    </a>
+
+                </div>
+
+                {% else %}
+
+                <div class="alert alert-danger mt-4">
+
+                    <h5>
+
+                        <i class="bi bi-trash-fill me-2"></i>
+
+                        Warning
+
+                    </h5>
+
+                    <p class="mb-0">
+
+                        This action cannot be undone.
+
+                        The category will be permanently deleted from the system.
+
+                    </p>
+
+                </div>
+
+                <form method="POST">
+
+                    <div class="d-grid gap-3 mt-4">
+
+                        <button
+                            type="submit"
+                            class="btn btn-danger btn-lg rounded-pill">
+
+                            <i class="bi bi-trash me-2"></i>
+
+                            Delete Category
+
+                        </button>
+
+                        <a
+                            href="{{ url_for('admin.categories') }}"
+                            class="btn btn-outline-secondary btn-lg rounded-pill">
+
+                            Cancel
+
+                        </a>
+
+                    </div>
+
+                </form>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

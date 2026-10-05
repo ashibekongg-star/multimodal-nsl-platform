@@ -1,104 +1,114 @@
 {% extends "base.html" %}
 
 {% block title %}
-{{ sign.word }}
+{{ sign.word }} - NSL Dictionary
 {% endblock %}
 
 {% block content %}
 
-<div class="mb-4">
+<div class="container-fluid">
 
-    <a href="{{ url_for('dictionary.category', category_id=sign.category.id) }}"
-       class="btn btn-outline-secondary">
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
 
-        ← Back to {{ sign.category.name }}
+    <div class="card border-0 shadow-sm rounded-4 mb-5 overflow-hidden">
 
-    </a>
+        <div class="card-body bg-primary text-white p-5">
 
-</div>
+            <div class="row align-items-center">
 
-<div class="card shadow">
+                <div class="col-lg-8">
 
-    <div class="card-header bg-primary text-white">
+                    <!-- Breadcrumb -->
 
-        <h2 class="mb-0">
+                    <nav aria-label="breadcrumb">
 
-            {{ sign.word }}
+                        <ol class="breadcrumb mb-3">
 
-        </h2>
+                            <li class="breadcrumb-item">
 
-    </div>
+                                <a
+                                    href="{{ url_for('dictionary.categories') }}"
+                                    class="text-white text-decoration-none">
 
-    <div class="card-body">
+                                    <i class="bi bi-book me-1"></i>
 
-        <div class="row">
+                                    Dictionary
 
-            <div class="col-md-6">
+                                </a>
 
-                <table class="table table-bordered">
+                            </li>
 
-                    <tr>
-                        <th width="35%">Category</th>
-                        <td>{{ sign.category.name }}</td>
-                    </tr>
 
-                    <tr>
-                        <th>Meaning</th>
-                        <td>{{ sign.meaning or "Not available" }}</td>
-                    </tr>
+                            <li class="breadcrumb-item">
 
-                    <tr>
-                        <th>Description</th>
-                        <td>{{ sign.description or "Not available" }}</td>
-                    </tr>
+                                <a
+                                    href="{{ url_for(
+                                        'dictionary.category',
+                                        category_id=sign.category.id
+                                    ) }}"
+                                    class="text-white text-decoration-none">
 
-                    <tr>
-                        <th>Example Sentence</th>
-                        <td>{{ sign.example_sentence or "Not available" }}</td>
-                    </tr>
+                                    {{ sign.category.name }}
 
-                    <tr>
-                        <th>Status</th>
-                        <td>{{ sign.status|capitalize }}</td>
-                    </tr>
+                                </a>
 
-                </table>
+                            </li>
 
-            </div>
 
-            <div class="col-md-6">
+                            <li class="breadcrumb-item active text-white">
 
-                <h4>Sign Video</h4>
+                                {{ sign.word }}
 
-                {% if sign.video_filename %}
+                            </li>
 
-                <video
-                    class="w-100 border rounded"
-                    controls>
+                        </ol>
 
-                    <source
-                        src="{{ url_for('static', filename='videos/' + sign.video_filename) }}"
-                        type="video/mp4">
+                    </nav>
 
-                    Your browser does not support HTML5 video.
 
-                </video>
+                    <!-- Category -->
 
-                <p class="mt-2 text-muted">
+                    <span class="badge bg-white text-primary
+                                 px-3 py-2 mb-3">
 
-                    {{ sign.video_filename }}
+                        <i class="bi bi-folder-fill me-1"></i>
 
-                </p>
+                        {{ sign.category.name }}
 
-                {% else %}
+                    </span>
 
-                <div class="alert alert-warning">
 
-                    No video available for this sign.
+                    <!-- Word -->
+
+                    <h1 class="display-4 fw-bold mb-3">
+
+                        {{ sign.word }}
+
+                    </h1>
+
+
+                    <!-- Meaning -->
+
+                    <p class="lead mb-0">
+
+                        {{ sign.meaning
+                           or "Learn this Nigerian Sign Language sign through the video demonstration below." }}
+
+                    </p>
 
                 </div>
 
-                {% endif %}
+
+                <div class="col-lg-4 text-center mt-4 mt-lg-0">
+
+                    <i
+                        class="bi bi-hand-index-thumb-fill"
+                        style="font-size: 100px;">
+                    </i>
+
+                </div>
 
             </div>
 
@@ -106,6 +116,598 @@
 
     </div>
 
+
+    <!-- =====================================================
+         QUICK INFORMATION
+    ====================================================== -->
+
+    <div class="row g-4 mb-5">
+
+        <!-- Category -->
+
+        <div class="col-md-4">
+
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                <div class="card-body text-center p-4">
+
+                    <i
+                        class="bi bi-folder-fill text-primary"
+                        style="font-size: 45px;">
+                    </i>
+
+                    <h5 class="fw-bold mt-3">
+
+                        Category
+
+                    </h5>
+
+                    <p class="text-muted mb-0">
+
+                        {{ sign.category.name }}
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Status -->
+
+        <div class="col-md-4">
+
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                <div class="card-body text-center p-4">
+
+                    {% if sign.status == "active" %}
+
+                    <i
+                        class="bi bi-check-circle-fill text-success"
+                        style="font-size: 45px;">
+                    </i>
+
+                    <h5 class="fw-bold mt-3">
+
+                        Status
+
+                    </h5>
+
+                    <span class="badge bg-success rounded-pill px-3 py-2">
+
+                        Active
+
+                    </span>
+
+                    {% else %}
+
+                    <i
+                        class="bi bi-x-circle-fill text-secondary"
+                        style="font-size: 45px;">
+                    </i>
+
+                    <h5 class="fw-bold mt-3">
+
+                        Status
+
+                    </h5>
+
+                    <span class="badge bg-secondary rounded-pill px-3 py-2">
+
+                        Inactive
+
+                    </span>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Video -->
+
+        <div class="col-md-4">
+
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                <div class="card-body text-center p-4">
+
+                    {% if sign.video_filename %}
+
+                    <i
+                        class="bi bi-camera-video-fill text-primary"
+                        style="font-size: 45px;">
+                    </i>
+
+                    <h5 class="fw-bold mt-3">
+
+                        Video
+
+                    </h5>
+
+                    <span class="badge bg-primary rounded-pill px-3 py-2">
+
+                        Available
+
+                    </span>
+
+                    {% else %}
+
+                    <i
+                        class="bi bi-camera-video-off-fill text-secondary"
+                        style="font-size: 45px;">
+                    </i>
+
+                    <h5 class="fw-bold mt-3">
+
+                        Video
+
+                    </h5>
+
+                    <span class="badge bg-secondary rounded-pill px-3 py-2">
+
+                        Coming Soon
+
+                    </span>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
+    <div class="row g-4">
+
+        <!-- =================================================
+             INFORMATION
+        ================================================== -->
+
+        <div class="col-lg-5">
+
+
+            <!-- Meaning -->
+
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+                <div class="card-body p-4">
+
+                    <h4 class="fw-bold text-primary mb-3">
+
+                        <i class="bi bi-bookmark-fill me-2"></i>
+
+                        Meaning
+
+                    </h4>
+
+                    <p class="mb-0">
+
+                        {{ sign.meaning
+                           or "No meaning available." }}
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Description -->
+
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+                <div class="card-body p-4">
+
+                    <h4 class="fw-bold text-primary mb-3">
+
+                        <i class="bi bi-info-circle-fill me-2"></i>
+
+                        Description
+
+                    </h4>
+
+                    <p class="mb-0">
+
+                        {{ sign.description
+                           or "No description available." }}
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Example Sentence -->
+
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+                <div class="card-body p-4">
+
+                    <h4 class="fw-bold text-primary mb-3">
+
+                        <i class="bi bi-chat-left-text-fill me-2"></i>
+
+                        Example Sentence
+
+                    </h4>
+
+                    <p class="mb-0">
+
+                        {{ sign.example_sentence
+                           or "No example sentence available." }}
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Information -->
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-body p-4">
+
+                    <h4 class="fw-bold text-primary mb-3">
+
+                        <i class="bi bi-database-fill me-2"></i>
+
+                        Sign Information
+
+                    </h4>
+
+                    <hr>
+
+
+                    <p>
+
+                        <strong>Word:</strong>
+
+                        {{ sign.word }}
+
+                    </p>
+
+
+                    <p>
+
+                        <strong>Category:</strong>
+
+                        {{ sign.category.name }}
+
+                    </p>
+
+
+                    <p>
+
+                        <strong>Status:</strong>
+
+                        {{ sign.status|title }}
+
+                    </p>
+
+
+                    <p class="mb-0">
+
+                        <strong>Created:</strong>
+
+                        {{ sign.created_at.strftime("%d %B %Y")
+                           if sign.created_at
+                           else "Unknown" }}
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             VIDEO
+        ================================================== -->
+
+        <div class="col-lg-7">
+
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+
+                <div class="card-header bg-primary text-white p-3">
+
+                    <h4 class="mb-0">
+
+                        <i class="bi bi-play-circle-fill me-2"></i>
+
+                        Nigerian Sign Language Video
+
+                    </h4>
+
+                </div>
+
+
+                <div class="card-body p-4">
+
+                    {% if sign.video_filename %}
+
+                    <div class="ratio ratio-16x9">
+
+                        <video
+                            id="signVideo"
+                            class="rounded-4 shadow"
+                            controls
+                            preload="metadata"
+                            playsinline>
+
+                            <source
+                                src="{{ url_for(
+                                    'static',
+                                    filename='videos/' + sign.video_filename
+                                ) }}"
+                                type="video/mp4">
+
+                            Your browser does not support HTML5 video.
+
+                        </video>
+
+                    </div>
+
+
+                    <div class="text-center mt-4">
+
+                        <span class="badge bg-success rounded-pill px-3 py-2">
+
+                            <i class="bi bi-check-circle-fill me-1"></i>
+
+                            Video Available
+
+                        </span>
+
+                    </div>
+
+                    {% else %}
+
+                    <div class="text-center py-5">
+
+                        <i
+                            class="bi bi-camera-video-off text-secondary"
+                            style="font-size: 80px;">
+                        </i>
+
+
+                        <h3 class="fw-bold mt-4">
+
+                            Video Coming Soon
+
+                        </h3>
+
+
+                        <p class="text-muted">
+
+                            A Nigerian Sign Language video
+                            has not been uploaded for this sign yet.
+
+                        </p>
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         RELATED SIGNS
+    ====================================================== -->
+
+    {% if related_signs %}
+
+    <div class="mt-5">
+
+        <div class="d-flex justify-content-between
+                    align-items-center mb-4">
+
+            <div>
+
+                <h2 class="fw-bold mb-1">
+
+                    Related Signs
+
+                </h2>
+
+                <p class="text-muted mb-0">
+
+                    Other signs in the same category.
+
+                </p>
+
+            </div>
+
+
+            <span class="badge bg-primary fs-6 px-3 py-2">
+
+                {{ related_signs|length }} Related
+
+            </span>
+
+        </div>
+
+
+        <div class="row g-4">
+
+            {% for related in related_signs %}
+
+            <div class="col-md-6 col-lg-4">
+
+                <div
+                    class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
+
+                    <div
+                        class="bg-primary text-white text-center p-4">
+
+                        <i
+                            class="bi bi-hand-index-thumb-fill"
+                            style="font-size: 50px;">
+                        </i>
+
+                    </div>
+
+
+                    <div class="card-body text-center p-4">
+
+                        <h4 class="fw-bold">
+
+                            {{ related.word }}
+
+                        </h4>
+
+
+                        <p class="text-muted">
+
+                            {{ related.meaning
+                               or "No meaning available." }}
+
+                        </p>
+
+
+                        {% if related.video_filename %}
+
+                        <span
+                            class="badge bg-success rounded-pill px-3 py-2">
+
+                            <i class="bi bi-camera-video-fill me-1"></i>
+
+                            Video Available
+
+                        </span>
+
+                        {% else %}
+
+                        <span
+                            class="badge bg-secondary rounded-pill px-3 py-2">
+
+                            <i class="bi bi-camera-video-off-fill me-1"></i>
+
+                            No Video
+
+                        </span>
+
+                        {% endif %}
+
+
+                        <a
+                            href="{{ url_for(
+                                'dictionary.sign',
+                                sign_id=related.id
+                            ) }}"
+                            class="btn btn-outline-primary
+                                   rounded-pill mt-4 w-100">
+
+                            <i class="bi bi-arrow-right-circle-fill me-2"></i>
+
+                            View Sign
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         NAVIGATION
+    ====================================================== -->
+
+    <div class="row mt-5 mb-4">
+
+        <div class="col-md-6">
+
+            <a
+                href="{{ url_for(
+                    'dictionary.category',
+                    category_id=sign.category.id
+                ) }}"
+                class="btn btn-outline-primary btn-lg
+                       rounded-pill w-100">
+
+                <i class="bi bi-arrow-left me-2"></i>
+
+                Back to {{ sign.category.name }}
+
+            </a>
+
+        </div>
+
+
+        <div class="col-md-6 mt-3 mt-md-0">
+
+            <a
+                href="{{ url_for('dictionary.categories') }}"
+                class="btn btn-primary btn-lg
+                       rounded-pill w-100">
+
+                <i class="bi bi-grid-3x3-gap-fill me-2"></i>
+
+                All Categories
+
+            </a>
+
+        </div>
+
+    </div>
+
 </div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const video =
+        document.getElementById("signVideo");
+
+    if (video) {
+
+        video.playbackRate = 1.0;
+
+    }
+
+});
+
+</script>
 
 {% endblock %}

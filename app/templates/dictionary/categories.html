@@ -1,47 +1,522 @@
 {% extends "base.html" %}
 
 {% block title %}
-Dictionary
+NSL Dictionary
 {% endblock %}
 
 {% block content %}
 
-<h1 class="mb-4">Nigerian Sign Language Dictionary</h1>
+<div class="container-fluid">
 
-<div class="row">
+    <!-- =====================================================
+         HERO SECTION
+    ====================================================== -->
 
-{% for category in categories %}
+    <div class="card border-0 shadow-sm rounded-4 mb-5 overflow-hidden">
 
-<div class="col-md-4 mb-4">
+        <div class="card-body p-5 bg-primary text-white">
 
-    <div class="card h-100 shadow-sm">
+            <div class="row align-items-center">
 
-        <div class="card-body">
+                <div class="col-lg-8">
 
-            <h5 class="card-title">
+                    <span class="badge bg-white text-primary px-3 py-2 mb-3">
+                        🇳🇬 Nigerian Sign Language
+                    </span>
 
-                <a
-                    href="{{ url_for('dictionary.category', category_id=category.id) }}"
-                    class="text-decoration-none">
+                    <h1 class="display-5 fw-bold mb-3">
+                        NSL Dictionary
+                    </h1>
 
-                    {{ category.name }}
+                    <p class="lead mb-0">
+                        Explore Nigerian Sign Language words, meanings,
+                        categories and sign language videos.
+                    </p>
 
-                </a>
+                </div>
 
-            </h5>
+                <div class="col-lg-4 text-center mt-4 mt-lg-0">
 
-            <p class="card-text">
-                {{ category.description }}
-            </p>
+                    <i class="bi bi-book-half"
+                       style="font-size: 100px;"></i>
+
+                </div>
+
+            </div>
 
         </div>
 
     </div>
 
+
+    <!-- =====================================================
+         SEARCH
+    ====================================================== -->
+
+    <div class="card border-0 shadow-sm rounded-4 mb-5">
+
+        <div class="card-body p-4">
+
+            <label for="searchBox"
+                   class="form-label fw-bold">
+
+                <i class="bi bi-search me-2 text-primary"></i>
+
+                Search Categories
+
+            </label>
+
+            <div class="input-group input-group-lg">
+
+                <span class="input-group-text bg-white">
+
+                    <i class="bi bi-search text-primary"></i>
+
+                </span>
+
+                <input
+                    id="searchBox"
+                    type="text"
+                    class="form-control"
+                    placeholder="Search category name or description..."
+                    autocomplete="off">
+
+                <button
+                    type="button"
+                    id="clearSearch"
+                    class="btn btn-outline-secondary">
+
+                    <i class="bi bi-x-circle"></i>
+
+                    Clear
+
+                </button>
+
+            </div>
+
+            <small class="text-muted d-block mt-2">
+
+                Search for categories such as Education, Family,
+                Greetings, Numbers, ICT, Health and more.
+
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         STATISTICS
+    ====================================================== -->
+
+    <div class="row g-4 mb-5">
+
+        <!-- Categories -->
+
+        <div class="col-md-4">
+
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                <div class="card-body text-center p-4">
+
+                    <div class="mb-3">
+
+                        <i class="bi bi-folder-fill text-primary"
+                           style="font-size: 45px;"></i>
+
+                    </div>
+
+                    <h2 class="fw-bold mb-1">
+
+                        {{ categories|length }}
+
+                    </h2>
+
+                    <p class="text-muted mb-0">
+
+                        Categories
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Total Signs -->
+
+        <div class="col-md-4">
+
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                <div class="card-body text-center p-4">
+
+                    <div class="mb-3">
+
+                        <i class="bi bi-hand-index-thumb-fill text-success"
+                           style="font-size: 45px;"></i>
+
+                    </div>
+
+                    <h2 class="fw-bold mb-1">
+
+                        {{ total_signs }}
+
+                    </h2>
+
+                    <p class="text-muted mb-0">
+
+                        Total Signs
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Video Learning -->
+
+        <div class="col-md-4">
+
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                <div class="card-body text-center p-4">
+
+                    <div class="mb-3">
+
+                        <i class="bi bi-camera-video-fill text-danger"
+                           style="font-size: 45px;"></i>
+
+                    </div>
+
+                    <h2 class="fw-bold mb-1">
+
+                        Video
+
+                    </h2>
+
+                    <p class="text-muted mb-0">
+
+                        Sign Language Learning
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         CATEGORY HEADER
+    ====================================================== -->
+
+    <div class="d-flex justify-content-between
+                align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold mb-1">
+
+                Browse Categories
+
+            </h2>
+
+            <p class="text-muted mb-0">
+
+                Select a category to explore Nigerian Sign Language signs.
+
+            </p>
+
+        </div>
+
+        <span class="badge bg-primary fs-6 px-3 py-2">
+
+            {{ categories|length }} Categories
+
+        </span>
+
+    </div>
+
+
+    <!-- =====================================================
+         NO SEARCH RESULTS MESSAGE
+    ====================================================== -->
+
+    <div id="noResults"
+         class="alert alert-warning text-center rounded-4 shadow-sm"
+         style="display:none;">
+
+        <i class="bi bi-search display-5"></i>
+
+        <h5 class="mt-3 fw-bold">
+
+            No categories found
+
+        </h5>
+
+        <p class="mb-0">
+
+            Try another search word.
+
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         CATEGORY CARDS
+    ====================================================== -->
+
+    <div class="row g-4"
+         id="categoryContainer">
+
+        {% for category in categories %}
+
+        <div class="col-md-6 col-lg-4 category-wrapper">
+
+            <div class="card border-0 shadow-sm h-100 rounded-4
+                        category-card overflow-hidden">
+
+                <!-- Card Header -->
+
+                <div class="bg-primary text-white text-center p-4">
+
+                    <i class="bi bi-folder2-open"
+                       style="font-size: 55px;"></i>
+
+                </div>
+
+
+                <!-- Card Body -->
+
+                <div class="card-body p-4">
+
+                    <h4 class="fw-bold mb-2">
+
+                        {{ category.name }}
+
+                    </h4>
+
+
+                    <p class="text-muted">
+
+                        {{ category.description
+                           or "Explore Nigerian Sign Language signs in this category." }}
+
+                    </p>
+
+
+                    <!-- Sign Count -->
+
+                    <div class="mb-3">
+
+                        <span class="badge bg-success rounded-pill px-3 py-2">
+
+                            <i class="bi bi-hand-index-thumb me-1"></i>
+
+                            {{ category.signs|length }} Signs
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- Progress -->
+
+                    {% set sign_count = category.signs|length %}
+
+                    {% set progress = sign_count * 5 %}
+
+                    {% if progress > 100 %}
+
+                        {% set progress = 100 %}
+
+                    {% endif %}
+
+                    <div class="d-flex justify-content-between
+                                small text-muted mb-1">
+
+                        <span>
+
+                            Dictionary Coverage
+
+                        </span>
+
+                        <span>
+
+                            {{ progress }}%
+
+                        </span>
+
+                    </div>
+
+                    <div class="progress mb-4"
+                         style="height: 8px;">
+
+                        <div
+                            class="progress-bar bg-primary"
+                            role="progressbar"
+                            style="width: {{ progress }}%;">
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Open Category -->
+
+                    <a
+                        href="{{ url_for(
+                            'dictionary.category',
+                            category_id=category.id
+                        ) }}"
+                        class="btn btn-primary w-100 rounded-pill">
+
+                        <i class="bi bi-arrow-right-circle-fill me-2"></i>
+
+                        Open Category
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% else %}
+
+        <!-- No Categories -->
+
+        <div class="col-12">
+
+            <div class="alert alert-warning
+                        shadow-sm rounded-4 text-center p-5">
+
+                <i class="bi bi-folder-x display-3"></i>
+
+                <h3 class="mt-3 fw-bold">
+
+                    No Categories Available
+
+                </h3>
+
+                <p class="text-muted">
+
+                    Please create categories from the Admin Dashboard.
+
+                </p>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
 </div>
 
-{% endfor %}
+{% endblock %}
 
-</div>
+
+{% block scripts %}
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const searchBox =
+        document.getElementById("searchBox");
+
+    const clearSearch =
+        document.getElementById("clearSearch");
+
+    const categoryWrappers =
+        document.querySelectorAll(".category-wrapper");
+
+    const noResults =
+        document.getElementById("noResults");
+
+
+    function searchCategories() {
+
+        const keyword =
+            searchBox.value
+                .toLowerCase()
+                .trim();
+
+        let visibleCount = 0;
+
+
+        categoryWrappers.forEach(function (wrapper) {
+
+            const card =
+                wrapper.querySelector(".category-card");
+
+            const text =
+                card.innerText.toLowerCase();
+
+
+            if (text.includes(keyword)) {
+
+                wrapper.style.display = "";
+
+                visibleCount++;
+
+            } else {
+
+                wrapper.style.display = "none";
+
+            }
+
+        });
+
+
+        if (visibleCount === 0 && keyword !== "") {
+
+            noResults.style.display = "block";
+
+        } else {
+
+            noResults.style.display = "none";
+
+        }
+
+    }
+
+
+    searchBox.addEventListener(
+        "input",
+        searchCategories
+    );
+
+
+    clearSearch.addEventListener(
+        "click",
+        function () {
+
+            searchBox.value = "";
+
+            searchCategories();
+
+            searchBox.focus();
+
+        }
+    );
+
+});
+
+</script>
 
 {% endblock %}
