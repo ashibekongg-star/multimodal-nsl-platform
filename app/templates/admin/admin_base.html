@@ -4,29 +4,55 @@
 
 <div class="container-fluid">
 
-    <div class="row">
+```
+<div class="row min-vh-100">
 
-        <!-- Sidebar -->
 
-        <div class="col-md-3 col-lg-2 bg-white border-end shadow-sm min-vh-100 p-0">
+    <!-- =====================================================
+         ADMIN SIDEBAR
+    ====================================================== -->
+
+    <div class="col-md-3 col-lg-2 bg-white border-end shadow-sm p-0">
+
+        <div class="sticky-top">
+
+            <!-- BRAND -->
 
             <div class="p-4 border-bottom">
 
-                <h4 class="text-primary fw-bold mb-0">
+                <a href="{{ url_for('admin.dashboard') }}"
+                   class="text-decoration-none">
 
-                    <i class="bi bi-grid-1x2-fill"></i>
+                    <h4 class="text-primary fw-bold mb-0">
 
-                    NSL Admin
+                        <i class="bi bi-grid-1x2-fill me-2"></i>
 
-                </h4>
+                        NSL Admin
+
+                    </h4>
+
+                </a>
+
+                <small class="text-muted">
+                    Administration Panel
+                </small>
 
             </div>
 
+
+            <!-- NAVIGATION -->
+
             <div class="list-group list-group-flush">
+
+
+                <!-- DASHBOARD -->
 
                 <a
                     href="{{ url_for('admin.dashboard') }}"
-                    class="list-group-item list-group-item-action py-3">
+                    class="list-group-item list-group-item-action py-3
+                    {% if request.endpoint == 'admin.dashboard' %}
+                        active
+                    {% endif %}">
 
                     <i class="bi bi-speedometer2 me-2"></i>
 
@@ -34,9 +60,20 @@
 
                 </a>
 
+
+                <!-- CATEGORIES -->
+
                 <a
                     href="{{ url_for('admin.categories') }}"
-                    class="list-group-item list-group-item-action py-3">
+                    class="list-group-item list-group-item-action py-3
+                    {% if request.endpoint in [
+                        'admin.categories',
+                        'admin.add_category',
+                        'admin.edit_category',
+                        'admin.delete_category'
+                    ] %}
+                        active
+                    {% endif %}">
 
                     <i class="bi bi-folder me-2"></i>
 
@@ -44,9 +81,21 @@
 
                 </a>
 
+
+                <!-- SIGNS -->
+
                 <a
                     href="{{ url_for('admin.signs') }}"
-                    class="list-group-item list-group-item-action py-3">
+                    class="list-group-item list-group-item-action py-3
+                    {% if request.endpoint in [
+                        'admin.signs',
+                        'admin.add_sign',
+                        'admin.edit_sign',
+                        'admin.view_sign',
+                        'admin.delete_sign'
+                    ] %}
+                        active
+                    {% endif %}">
 
                     <i class="bi bi-hand-index-thumb me-2"></i>
 
@@ -54,18 +103,41 @@
 
                 </a>
 
+
+                <!-- VIDEOS -->
+
                 <a
                     href="{{ url_for('admin.videos') }}"
-                    class="list-group-item list-group-item-action py-3">
+                    class="list-group-item list-group-item-action py-3
+                    {% if request.endpoint in [
+                        'admin.videos',
+                        'admin.delete_video'
+                    ] %}
+                        active
+                    {% endif %}">
 
                     <i class="bi bi-camera-video me-2"></i>
+
                     Videos
 
                 </a>
 
+
+                <!-- USERS -->
+
                 <a
                     href="{{ url_for('admin.users') }}"
-                    class="list-group-item list-group-item-action py-3">
+                    class="list-group-item list-group-item-action py-3
+                    {% if request.endpoint in [
+                        'admin.users',
+                        'admin.add_user',
+                        'admin.view_user',
+                        'admin.edit_user',
+                        'admin.delete_user',
+                        'admin.toggle_user_status'
+                    ] %}
+                        active
+                    {% endif %}">
 
                     <i class="bi bi-people me-2"></i>
 
@@ -73,38 +145,60 @@
 
                 </a>
 
-                <a
-                    href="#"
-                    class="list-group-item list-group-item-action py-3">
+
+                <!-- REPORTS - COMING SOON -->
+
+                <span
+                    class="list-group-item py-3 text-muted"
+                    title="Reports module coming soon">
 
                     <i class="bi bi-bar-chart me-2"></i>
 
                     Reports
 
-                </a>
+                    <span class="badge bg-secondary float-end">
+                        Soon
+                    </span>
 
-                <a
-                    href="#"
-                    class="list-group-item list-group-item-action py-3">
+                </span>
+
+
+                <!-- SETTINGS - COMING SOON -->
+
+                <span
+                    class="list-group-item py-3 text-muted"
+                    title="Settings module coming soon">
 
                     <i class="bi bi-gear me-2"></i>
 
                     Settings
 
-                </a>
+                    <span class="badge bg-secondary float-end">
+                        Soon
+                    </span>
+
+                </span>
 
             </div>
 
-        </div>
 
-        <!-- Main Content -->
+            <!-- ADMIN FOOTER -->
 
-        <div class="col-md-9 col-lg-10">
+            <div class="p-3 border-top mt-3">
 
-            <div class="p-4">
+                <div class="small text-muted mb-2">
 
-                {% block admin_content %}
-                {% endblock %}
+                    <i class="bi bi-shield-check me-1"></i>
+
+                    Administrator
+
+                </div>
+
+                <div class="small text-muted">
+
+                    NSL-AI Connect
+
+                </div>
 
             </div>
 
@@ -112,8 +206,38 @@
 
     </div>
 
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
+    <div class="col-md-9 col-lg-10">
+
+        <main class="p-3 p-md-4">
+
+            {% block admin_content %}
+            {% endblock %}
+
+        </main>
+
+    </div>
+
+</div>
+```
+
 </div>
 
+<!-- =========================================================
+     CHART.JS
+========================================================= -->
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- =========================================================
+     PAGE-SPECIFIC SCRIPTS
+========================================================= -->
+
+{% block scripts %}
+{% endblock %}
 
 {% endblock %}
