@@ -1,4 +1,3 @@
-
 {% extends "admin/admin_base.html" %}
 
 {% block title %}Add New User{% endblock %}
@@ -7,224 +6,484 @@
 
 <div class="container-fluid py-3">
 
-    <!-- PAGE HEADER -->
-    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
-        <div>
-            <h2 class="fw-bold mb-1">
-                <i class="bi bi-person-plus-fill text-primary me-2"></i>
-                Add New User
-            </h2>
-            <p class="text-muted mb-0">
-                Create an account for a student, interpreter, or administrator.
-            </p>
-        </div>
+```
+<!-- PAGE HEADER -->
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">
+            <i class="bi bi-person-plus-fill text-primary me-2"></i>
+            Add New User
+        </h2>
 
-        <a href="{{ url_for('admin.users') }}"
-           class="btn btn-outline-primary">
-            <i class="bi bi-arrow-left me-1"></i>
-            Back to Users
-        </a>
+        <p class="text-muted mb-0">
+            Create an account for a student, interpreter, or administrator.
+        </p>
     </div>
 
-    <div class="row g-4">
+    <a href="{{ url_for('admin.users') }}"
+       class="btn btn-outline-primary">
 
-        <!-- USER FORM -->
-        <div class="col-xl-8">
+        <i class="bi bi-arrow-left me-1"></i>
+        Back to Users
 
-            <div class="card border-0 shadow-sm rounded-4">
+    </a>
+</div>
 
-                <div class="card-header bg-white border-0 p-4">
-                    <h5 class="fw-bold mb-1">Account Information</h5>
+
+<div class="row g-4">
+
+
+    <!-- ========================================= -->
+    <!-- USER FORM -->
+    <!-- ========================================= -->
+
+    <div class="col-xl-8">
+
+        <div class="card border-0 shadow-sm rounded-4">
+
+
+            <!-- CARD HEADER -->
+
+            <div class="card-header bg-white border-0 p-4">
+
+                <h5 class="fw-bold mb-1">
+                    Account Information
+                </h5>
+
+                <p class="text-muted small mb-0">
+                    Complete the fields below to register the user.
+                </p>
+
+            </div>
+
+
+            <!-- CARD BODY -->
+
+            <div class="card-body p-4">
+
+                <form method="POST"
+                      enctype="multipart/form-data">
+
+                    {{ form.hidden_tag() }}
+
+
+                    <!-- ========================================= -->
+                    <!-- FULL NAME -->
+                    <!-- ========================================= -->
+
+                    <div class="mb-4">
+
+                        {{ form.full_name.label(
+                            class="form-label fw-semibold"
+                        ) }}
+
+                        {{ form.full_name(
+                            class="form-control form-control-lg",
+                            placeholder="Enter the user's full name"
+                        ) }}
+
+                        {% for error in form.full_name.errors %}
+
+                            <div class="text-danger small mt-1">
+                                <i class="bi bi-exclamation-circle me-1"></i>
+                                {{ error }}
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- ========================================= -->
+                    <!-- EMAIL -->
+                    <!-- ========================================= -->
+
+                    <div class="mb-4">
+
+                        {{ form.email.label(
+                            class="form-label fw-semibold"
+                        ) }}
+
+                        {{ form.email(
+                            class="form-control form-control-lg",
+                            placeholder="name@example.com",
+                            type="email"
+                        ) }}
+
+                        {% for error in form.email.errors %}
+
+                            <div class="text-danger small mt-1">
+                                <i class="bi bi-exclamation-circle me-1"></i>
+                                {{ error }}
+                            </div>
+
+                        {% endfor %}
+
+                        <div class="form-text">
+                            Use a valid and unique email address.
+                        </div>
+
+                    </div>
+
+
+                    <!-- ========================================= -->
+                    <!-- PASSWORD -->
+                    <!-- ========================================= -->
+
+                    <div class="mb-4">
+
+                        {{ form.password.label(
+                            class="form-label fw-semibold"
+                        ) }}
+
+                        {{ form.password(
+                            class="form-control form-control-lg",
+                            placeholder="Create a password",
+                            autocomplete="new-password"
+                        ) }}
+
+                        {% for error in form.password.errors %}
+
+                            <div class="text-danger small mt-1">
+                                <i class="bi bi-exclamation-circle me-1"></i>
+                                {{ error }}
+                            </div>
+
+                        {% endfor %}
+
+                        <div class="form-text">
+                            Password must contain at least 8 characters.
+                        </div>
+
+                    </div>
+
+
+                    <!-- ========================================= -->
+                    <!-- PHONE -->
+                    <!-- ========================================= -->
+
+                    <div class="mb-4">
+
+                        {{ form.phone.label(
+                            class="form-label fw-semibold"
+                        ) }}
+
+                        {{ form.phone(
+                            class="form-control form-control-lg",
+                            placeholder="Enter phone number"
+                        ) }}
+
+                        {% for error in form.phone.errors %}
+
+                            <div class="text-danger small mt-1">
+                                <i class="bi bi-exclamation-circle me-1"></i>
+                                {{ error }}
+                            </div>
+
+                        {% endfor %}
+
+                        <div class="form-text">
+                            Optional.
+                        </div>
+
+                    </div>
+
+
+                    <!-- ========================================= -->
+                    <!-- ROLE -->
+                    <!-- ========================================= -->
+
+                    <div class="mb-4">
+
+                        {{ form.role.label(
+                            class="form-label fw-semibold"
+                        ) }}
+
+                        {{ form.role(
+                            class="form-select form-select-lg"
+                        ) }}
+
+                        {% for error in form.role.errors %}
+
+                            <div class="text-danger small mt-1">
+                                <i class="bi bi-exclamation-circle me-1"></i>
+                                {{ error }}
+                            </div>
+
+                        {% endfor %}
+
+                        <div class="form-text">
+                            Select the appropriate role for this account.
+                        </div>
+
+                    </div>
+
+
+                    <!-- ========================================= -->
+                    <!-- BIOGRAPHY -->
+                    <!-- ========================================= -->
+
+                    <div class="mb-4">
+
+                        {{ form.bio.label(
+                            class="form-label fw-semibold"
+                        ) }}
+
+                        {{ form.bio(
+                            class="form-control",
+                            rows="4",
+                            placeholder="Write a short biography (optional)"
+                        ) }}
+
+                        {% for error in form.bio.errors %}
+
+                            <div class="text-danger small mt-1">
+                                <i class="bi bi-exclamation-circle me-1"></i>
+                                {{ error }}
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- ========================================= -->
+                    <!-- PROFILE PHOTO -->
+                    <!-- ========================================= -->
+
+                    <div class="mb-4">
+
+                        {{ form.profile_image.label(
+                            class="form-label fw-semibold"
+                        ) }}
+
+                        {{ form.profile_image(
+                            class="form-control",
+                            accept=".jpg,.jpeg,.png,.webp"
+                        ) }}
+
+                        {% for error in form.profile_image.errors %}
+
+                            <div class="text-danger small mt-1">
+                                <i class="bi bi-exclamation-circle me-1"></i>
+                                {{ error }}
+                            </div>
+
+                        {% endfor %}
+
+                        <div class="form-text">
+                            Optional. Accepted formats:
+                            JPG, JPEG, PNG and WEBP.
+                        </div>
+
+                    </div>
+
+
+                    <!-- ========================================= -->
+                    <!-- FORM ERRORS SUMMARY -->
+                    <!-- ========================================= -->
+
+                    {% if form.errors %}
+
+                        <div class="alert alert-danger rounded-3">
+
+                            <div class="fw-semibold mb-2">
+
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+
+                                Please correct the following errors:
+
+                            </div>
+
+                            <ul class="mb-0">
+
+                                {% for field_name, field_errors in form.errors.items() %}
+
+                                    {% for error in field_errors %}
+
+                                        <li>
+                                            {{ error }}
+                                        </li>
+
+                                    {% endfor %}
+
+                                {% endfor %}
+
+                            </ul>
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <!-- ========================================= -->
+                    <!-- ACTIONS -->
+                    <!-- ========================================= -->
+
+                    <div class="border-top pt-4 d-flex flex-wrap gap-2">
+
+                        {{ form.submit(
+                            class="btn btn-primary btn-lg px-4"
+                        ) }}
+
+                        <a href="{{ url_for('admin.users') }}"
+                           class="btn btn-outline-secondary btn-lg">
+
+                            Cancel
+
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================= -->
+    <!-- INFORMATION PANEL -->
+    <!-- ========================================= -->
+
+    <div class="col-xl-4">
+
+
+        <!-- ACCOUNT ROLES -->
+
+        <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+            <div class="card-body p-4">
+
+                <h5 class="fw-bold mb-3">
+
+                    <i class="bi bi-shield-check text-primary me-2"></i>
+
+                    Account Roles
+
+                </h5>
+
+
+                <div class="mb-3">
+
+                    <div class="fw-semibold">
+                        Student
+                    </div>
+
                     <p class="text-muted small mb-0">
-                        Complete the fields below to register the user.
+                        A learner using the Nigerian Sign Language platform.
                     </p>
-                </div>
-
-                <div class="card-body p-4">
-
-                    <form method="POST"
-                          enctype="multipart/form-data">
-
-                        {{ form.hidden_tag() }}
-
-                        <!-- FULL NAME -->
-                        <div class="mb-4">
-                            {{ form.full_name.label(class="form-label fw-semibold") }}
-
-                            {{ form.full_name(
-                                class="form-control form-control-lg",
-                                placeholder="Enter the user's full name"
-                            ) }}
-
-                            {% for error in form.full_name.errors %}
-                                <div class="text-danger small mt-1">
-                                    {{ error }}
-                                </div>
-                            {% endfor %}
-                        </div>
-
-                        <!-- EMAIL -->
-                        <div class="mb-4">
-                            {{ form.email.label(class="form-label fw-semibold") }}
-
-                            {{ form.email(
-                                class="form-control form-control-lg",
-                                placeholder="name@example.com"
-                            ) }}
-
-                            {% for error in form.email.errors %}
-                                <div class="text-danger small mt-1">
-                                    {{ error }}
-                                </div>
-                            {% endfor %}
-                        </div>
-
-                        <!-- PHONE -->
-                        <div class="mb-4">
-                            {{ form.phone.label(class="form-label fw-semibold") }}
-
-                            {{ form.phone(
-                                class="form-control form-control-lg",
-                                placeholder="Enter phone number"
-                            ) }}
-
-                            {% for error in form.phone.errors %}
-                                <div class="text-danger small mt-1">
-                                    {{ error }}
-                                </div>
-                            {% endfor %}
-                        </div>
-
-                        <!-- ROLE -->
-                        <div class="mb-4">
-                            {{ form.role.label(class="form-label fw-semibold") }}
-
-                            {{ form.role(class="form-select form-select-lg") }}
-
-                            {% for error in form.role.errors %}
-                                <div class="text-danger small mt-1">
-                                    {{ error }}
-                                </div>
-                            {% endfor %}
-
-                            <div class="form-text">
-                                Select the appropriate role for this account.
-                            </div>
-                        </div>
-
-                        <!-- BIOGRAPHY -->
-                        <div class="mb-4">
-                            {{ form.bio.label(class="form-label fw-semibold") }}
-
-                            {{ form.bio(
-                                class="form-control",
-                                rows="4",
-                                placeholder="Write a short biography (optional)"
-                            ) }}
-
-                            {% for error in form.bio.errors %}
-                                <div class="text-danger small mt-1">
-                                    {{ error }}
-                                </div>
-                            {% endfor %}
-                        </div>
-
-                        <!-- PROFILE PHOTO -->
-                        <div class="mb-4">
-                            {{ form.profile_image.label(class="form-label fw-semibold") }}
-
-                            {{ form.profile_image(
-                                class="form-control",
-                                accept=".jpg,.jpeg,.png,.webp"
-                            ) }}
-
-                            {% for error in form.profile_image.errors %}
-                                <div class="text-danger small mt-1">
-                                    {{ error }}
-                                </div>
-                            {% endfor %}
-
-                            <div class="form-text">
-                                Optional. Accepted formats: JPG, JPEG, PNG and WEBP.
-                            </div>
-                        </div>
-
-                        <!-- ACTIONS -->
-                        <div class="border-top pt-4 d-flex flex-wrap gap-2">
-
-                            {{ form.submit(
-                                class="btn btn-primary btn-lg px-4"
-                            ) }}
-
-                            <a href="{{ url_for('admin.users') }}"
-                               class="btn btn-outline-secondary btn-lg">
-                                Cancel
-                            </a>
-
-                        </div>
-
-                    </form>
 
                 </div>
+
+
+                <div class="mb-3">
+
+                    <div class="fw-semibold">
+                        Interpreter
+                    </div>
+
+                    <p class="text-muted small mb-0">
+                        A sign language interpreter or communication professional.
+                    </p>
+
+                </div>
+
+
+                <div>
+
+                    <div class="fw-semibold">
+                        Administrator
+                    </div>
+
+                    <p class="text-muted small mb-0">
+                        A user assigned administrative responsibilities.
+                    </p>
+
+                </div>
+
             </div>
+
         </div>
 
-        <!-- INFORMATION PANEL -->
-        <div class="col-xl-4">
 
-            <div class="card border-0 shadow-sm rounded-4 mb-4">
-                <div class="card-body p-4">
+        <!-- SECURITY INFORMATION -->
 
-                    <h5 class="fw-bold mb-3">
-                        <i class="bi bi-shield-check text-primary me-2"></i>
-                        Account Roles
-                    </h5>
+        <div class="card border-0 shadow-sm rounded-4 mb-4">
 
-                    <div class="mb-3">
-                        <div class="fw-semibold">Student</div>
-                        <p class="text-muted small mb-0">
-                            A learner using the Nigerian Sign Language platform.
-                        </p>
-                    </div>
+            <div class="card-body p-4">
 
-                    <div class="mb-3">
-                        <div class="fw-semibold">Interpreter</div>
-                        <p class="text-muted small mb-0">
-                            A sign language interpreter or communication professional.
-                        </p>
-                    </div>
+                <h5 class="fw-bold mb-3">
 
-                    <div>
-                        <div class="fw-semibold">Administrator</div>
-                        <p class="text-muted small mb-0">
-                            A user assigned administrative responsibilities.
-                        </p>
-                    </div>
+                    <i class="bi bi-lock-fill text-warning me-2"></i>
 
-                </div>
+                    Password Security
+
+                </h5>
+
+                <p class="text-muted small mb-0">
+
+                    The password is securely hashed before it is stored
+                    in the database. The original password is never stored
+                    as plain text.
+
+                </p>
+
             </div>
 
-            <div class="card border-0 shadow-sm rounded-4">
-                <div class="card-body p-4">
+        </div>
 
-                    <h5 class="fw-bold mb-3">
-                        <i class="bi bi-info-circle text-success me-2"></i>
-                        Before Saving
-                    </h5>
 
-                    <ul class="small text-muted ps-3 mb-0">
-                        <li class="mb-2">Enter the correct full name.</li>
-                        <li class="mb-2">Use a valid, unique email address.</li>
-                        <li class="mb-2">Choose the correct account role.</li>
-                        <li>Only upload an image if needed.</li>
-                    </ul>
+        <!-- BEFORE SAVING -->
 
-                </div>
+        <div class="card border-0 shadow-sm rounded-4">
+
+            <div class="card-body p-4">
+
+                <h5 class="fw-bold mb-3">
+
+                    <i class="bi bi-info-circle text-success me-2"></i>
+
+                    Before Saving
+
+                </h5>
+
+
+                <ul class="small text-muted ps-3 mb-0">
+
+                    <li class="mb-2">
+                        Enter the correct full name.
+                    </li>
+
+                    <li class="mb-2">
+                        Use a valid and unique email address.
+                    </li>
+
+                    <li class="mb-2">
+                        Create a password with at least 8 characters.
+                    </li>
+
+                    <li class="mb-2">
+                        Choose the correct account role.
+                    </li>
+
+                    <li>
+                        Only upload an image if needed.
+                    </li>
+
+                </ul>
+
             </div>
 
         </div>
 
     </div>
+
+</div>
+```
+
 </div>
 
 {% endblock %}

@@ -18,7 +18,7 @@ from flask_login import (
     current_user
 )
 
-from app import db
+from app import db, bcrypt
 
 from app.decorators import admin_required
 
@@ -161,6 +161,7 @@ def dashboard():
         # Recent signs
         recent_signs=recent_signs
     )
+
 
 # =====================================================
 # CATEGORY MANAGEMENT
@@ -475,10 +476,17 @@ def add_sign():
                 f"{extension}"
             )
 
+            upload_folder = current_app.config[
+                "UPLOAD_FOLDER"
+            ]
+
+            os.makedirs(
+                upload_folder,
+                exist_ok=True
+            )
+
             save_path = os.path.join(
-                current_app.config[
-                    "UPLOAD_FOLDER"
-                ],
+                upload_folder,
                 unique_filename
             )
 
@@ -606,10 +614,17 @@ def edit_sign(sign_id):
                 f"{extension}"
             )
 
+            upload_folder = current_app.config[
+                "UPLOAD_FOLDER"
+            ]
+
+            os.makedirs(
+                upload_folder,
+                exist_ok=True
+            )
+
             save_path = os.path.join(
-                current_app.config[
-                    "UPLOAD_FOLDER"
-                ],
+                upload_folder,
                 unique_filename
             )
 
@@ -744,6 +759,7 @@ def delete_sign(sign_id):
         sign=sign
     )
 
+
 # =====================================================
 # VIDEO MANAGEMENT
 # =====================================================
@@ -860,6 +876,7 @@ def videos():
         inactive_videos=inactive_videos
     )
 
+
 # =====================================================
 # DELETE VIDEO ONLY
 # =====================================================
@@ -920,9 +937,6 @@ def delete_video(sign_id):
         sign=sign
     )
 
-# =====================================================
-# USER MANAGEMENT
-# =====================================================
 
 # =====================================================
 # USER MANAGEMENT
@@ -946,11 +960,18 @@ def add_user():
     if form.validate_on_submit():
 
         # ---------------------------------------------
+        # NORMALIZE EMAIL
+        # ---------------------------------------------
+
+        email = form.email.data.strip().lower()
+
+
+        # ---------------------------------------------
         # CHECK FOR EXISTING EMAIL
         # ---------------------------------------------
 
         existing_user = User.query.filter_by(
-            email=form.email.data
+            email=email
         ).first()
 
         if existing_user:
@@ -989,10 +1010,17 @@ def add_user():
                 f"{extension}"
             )
 
+            upload_folder = current_app.config[
+                "PROFILE_IMAGE_FOLDER"
+            ]
+
+            os.makedirs(
+                upload_folder,
+                exist_ok=True
+            )
+
             save_path = os.path.join(
-                current_app.config[
-                    "PROFILE_IMAGE_FOLDER"
-                ],
+                upload_folder,
                 unique_filename
             )
 
@@ -1004,20 +1032,41 @@ def add_user():
 
 
         # ---------------------------------------------
+        # HASH PASSWORD
+        # ---------------------------------------------
+
+        hashed_password = (
+            bcrypt.generate_password_hash(
+                form.password.data
+            ).decode("utf-8")
+        )
+
+
+        # ---------------------------------------------
         # CREATE USER
         # ---------------------------------------------
 
         user = User(
 
-            full_name=form.full_name.data,
+            full_name=form.full_name.data.strip(),
 
-            email=form.email.data,
+            email=email,
 
-            phone=form.phone.data,
+            phone=(
+                form.phone.data.strip()
+                if form.phone.data
+                else None
+            ),
+
+            password=hashed_password,
 
             role=form.role.data,
 
-            bio=form.bio.data,
+            bio=(
+                form.bio.data.strip()
+                if form.bio.data
+                else None
+            ),
 
             profile_image=profile_image,
 
@@ -1029,9 +1078,52 @@ def add_user():
         # SAVE USER
         # ---------------------------------------------
 
-        db.session.add(user)
+        try:
 
-        db.session.commit()
+            db.session.add(user)
+
+            db.session.commit()
+
+        except Exception as error:
+
+            db.session.rollback()
+
+            # -----------------------------------------
+            # REMOVE UPLOADED IMAGE IF SAVE FAILED
+            # -----------------------------------------
+
+            if profile_image != "default.png":
+
+                uploaded_file = os.path.join(
+                    current_app.config[
+                        "PROFILE_IMAGE_FOLDER"
+                    ],
+                    profile_image
+                )
+
+                if os.path.exists(
+                    uploaded_file
+                ):
+
+                    os.remove(
+                        uploaded_file
+                    )
+
+            current_app.logger.exception(
+                "Error creating user: %s",
+                error
+            )
+
+            flash(
+                "Unable to create the user. "
+                "Please try again.",
+                "danger"
+            )
+
+            return render_template(
+                "admin/add_user.html",
+                form=form
+            )
 
 
         # ---------------------------------------------
@@ -1139,6 +1231,22 @@ def edit_user(user_id):
 
 
     # ---------------------------------------------
+    # IMPORTANT:
+    # PASSWORD IS NOT CHANGED HERE
+    #
+    # The UserForm requires a password for creating
+    # a new user. Existing users should not have to
+    # enter a new password every time they edit
+    # their profile.
+    #
+    # Therefore, remove the password requirement
+    # when editing an existing user.
+    # ---------------------------------------------
+
+    form.password.validators = []
+
+
+    # ---------------------------------------------
     # VALIDATE FORM
     # ---------------------------------------------
 
@@ -1148,8 +1256,10 @@ def edit_user(user_id):
         # CHECK DUPLICATE EMAIL
         # -----------------------------------------
 
+        email = form.email.data.strip().lower()
+
         existing_user = User.query.filter(
-            User.email == form.email.data,
+            User.email == email,
             User.id != user.id
         ).first()
 
@@ -1172,19 +1282,21 @@ def edit_user(user_id):
         # -----------------------------------------
 
         user.full_name = (
-            form.full_name.data
+            form.full_name.data.strip()
         )
 
-        user.email = (
-            form.email.data
-        )
+        user.email = email
 
         user.phone = (
-            form.phone.data
+            form.phone.data.strip()
+            if form.phone.data
+            else None
         )
 
         user.bio = (
-            form.bio.data
+            form.bio.data.strip()
+            if form.bio.data
+            else None
         )
 
         user.role = (
@@ -1213,10 +1325,17 @@ def edit_user(user_id):
                 f"{extension}"
             )
 
+            upload_folder = current_app.config[
+                "PROFILE_IMAGE_FOLDER"
+            ]
+
+            os.makedirs(
+                upload_folder,
+                exist_ok=True
+            )
+
             save_path = os.path.join(
-                current_app.config[
-                    "PROFILE_IMAGE_FOLDER"
-                ],
+                upload_folder,
                 unique_filename
             )
 
@@ -1263,7 +1382,30 @@ def edit_user(user_id):
         # SAVE CHANGES
         # -----------------------------------------
 
-        db.session.commit()
+        try:
+
+            db.session.commit()
+
+        except Exception as error:
+
+            db.session.rollback()
+
+            current_app.logger.exception(
+                "Error updating user: %s",
+                error
+            )
+
+            flash(
+                "Unable to update the user. "
+                "Please try again.",
+                "danger"
+            )
+
+            return render_template(
+                "admin/edit_user.html",
+                form=form,
+                user=user
+            )
 
 
         flash(

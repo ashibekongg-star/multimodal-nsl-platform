@@ -1,94 +1,94 @@
 {% extends "admin/admin_base.html" %}
 
-{% block title %}
-Edit User
-{% endblock %}
+{% block title %}Edit User{% endblock %}
 
 {% block admin_content %}
 
-<div class="container-fluid">
+<div class="container-fluid py-3">
 
     <!-- PAGE HEADER -->
-
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
 
         <div>
-
             <h2 class="fw-bold mb-1">
-
                 <i class="bi bi-person-gear text-primary me-2"></i>
-
                 Edit User
-
             </h2>
 
             <p class="text-muted mb-0">
-
-                Update user account information.
-
+                Update the account information and profile of this user.
             </p>
-
         </div>
 
-        <a
-            href="{{ url_for('admin.view_user', user_id=user.id) }}"
-            class="btn btn-outline-secondary">
+        <div class="d-flex gap-2">
 
-            <i class="bi bi-arrow-left me-1"></i>
+            <a href="{{ url_for('admin.view_user', user_id=user.id) }}"
+               class="btn btn-outline-primary">
 
-            Back to User
+                <i class="bi bi-person me-1"></i>
+                View Profile
 
-        </a>
+            </a>
+
+            <a href="{{ url_for('admin.users') }}"
+               class="btn btn-outline-secondary">
+
+                <i class="bi bi-arrow-left me-1"></i>
+                Back to Users
+
+            </a>
+
+        </div>
 
     </div>
 
 
-    <!-- EDIT USER FORM -->
+    <div class="row g-4">
 
-    <div class="row justify-content-center">
 
-        <div class="col-lg-8">
+        <!-- EDIT FORM -->
+        <div class="col-xl-8">
 
             <div class="card border-0 shadow-sm rounded-4">
 
-                <div class="card-header bg-white border-0 pt-4 px-4">
+                <div class="card-header bg-white border-0 p-4">
 
                     <h5 class="fw-bold mb-1">
 
-                        <i class="bi bi-person-vcard text-primary me-2"></i>
+                        <i class="bi bi-person-badge text-primary me-2"></i>
 
                         User Information
 
                     </h5>
 
-                    <small class="text-muted">
+                    <p class="text-muted small mb-0">
 
-                        Modify the information below and save your changes.
+                        Update the information below and save your changes.
 
-                    </small>
+                    </p>
 
                 </div>
 
 
                 <div class="card-body p-4">
 
-                    <form
-                        method="POST"
-                        enctype="multipart/form-data">
+                    <form method="POST"
+                          enctype="multipart/form-data">
 
                         {{ form.hidden_tag() }}
 
 
                         <!-- FULL NAME -->
 
-                        <div class="mb-3">
+                        <div class="mb-4">
 
                             {{ form.full_name.label(
                                 class="form-label fw-semibold"
                             ) }}
 
                             {{ form.full_name(
-                                class="form-control"
+                                class="form-control form-control-lg",
+                                placeholder="Enter full name"
                             ) }}
 
                             {% for error in form.full_name.errors %}
@@ -104,14 +104,15 @@ Edit User
 
                         <!-- EMAIL -->
 
-                        <div class="mb-3">
+                        <div class="mb-4">
 
                             {{ form.email.label(
                                 class="form-label fw-semibold"
                             ) }}
 
                             {{ form.email(
-                                class="form-control"
+                                class="form-control form-control-lg",
+                                placeholder="name@example.com"
                             ) }}
 
                             {% for error in form.email.errors %}
@@ -127,14 +128,15 @@ Edit User
 
                         <!-- PHONE -->
 
-                        <div class="mb-3">
+                        <div class="mb-4">
 
                             {{ form.phone.label(
                                 class="form-label fw-semibold"
                             ) }}
 
                             {{ form.phone(
-                                class="form-control"
+                                class="form-control form-control-lg",
+                                placeholder="Enter phone number"
                             ) }}
 
                             {% for error in form.phone.errors %}
@@ -150,14 +152,14 @@ Edit User
 
                         <!-- ROLE -->
 
-                        <div class="mb-3">
+                        <div class="mb-4">
 
                             {{ form.role.label(
                                 class="form-label fw-semibold"
                             ) }}
 
                             {{ form.role(
-                                class="form-select"
+                                class="form-select form-select-lg"
                             ) }}
 
                             {% for error in form.role.errors %}
@@ -168,12 +170,18 @@ Edit User
 
                             {% endfor %}
 
+                            <div class="form-text">
+
+                                Choose the appropriate role for this account.
+
+                            </div>
+
                         </div>
 
 
-                        <!-- BIO -->
+                        <!-- BIOGRAPHY -->
 
-                        <div class="mb-3">
+                        <div class="mb-4">
 
                             {{ form.bio.label(
                                 class="form-label fw-semibold"
@@ -181,7 +189,8 @@ Edit User
 
                             {{ form.bio(
                                 class="form-control",
-                                rows="4"
+                                rows="5",
+                                placeholder="Write a short biography"
                             ) }}
 
                             {% for error in form.bio.errors %}
@@ -195,7 +204,7 @@ Edit User
                         </div>
 
 
-                        <!-- PROFILE IMAGE -->
+                        <!-- PROFILE PHOTO -->
 
                         <div class="mb-4">
 
@@ -204,15 +213,9 @@ Edit User
                             ) }}
 
                             {{ form.profile_image(
-                                class="form-control"
+                                class="form-control",
+                                accept=".jpg,.jpeg,.png,.webp"
                             ) }}
-
-                            <small class="text-muted">
-
-                                JPG, JPEG, PNG or WEBP.
-                                Leave empty to keep the current photo.
-
-                            </small>
 
                             {% for error in form.profile_image.errors %}
 
@@ -222,38 +225,295 @@ Edit User
 
                             {% endfor %}
 
-                        </div>
+                            <div class="form-text">
 
+                                Upload a new image only if you want to
+                                replace the current profile photo.
 
-                        <!-- BUTTONS -->
-
-                        <div class="d-flex gap-2">
-
-                            <button
-                                type="submit"
-                                class="btn btn-primary">
-
-                                <i class="bi bi-save me-1"></i>
-
-                                Save Changes
-
-                            </button>
-
-
-                            <a
-                                href="{{ url_for(
-                                    'admin.view_user',
-                                    user_id=user.id
-                                ) }}"
-                                class="btn btn-outline-secondary">
-
-                                Cancel
-
-                            </a>
+                            </div>
 
                         </div>
+
+
+                        <!-- CURRENT IMAGE -->
+
+                        {% if user.profile_image %}
+
+                        <div class="card border rounded-4 mb-4">
+
+                            <div class="card-body p-4">
+
+                                <h6 class="fw-bold mb-3">
+
+                                    <i class="bi bi-image text-primary me-2"></i>
+
+                                    Current Profile Photo
+
+                                </h6>
+
+                                <div class="d-flex align-items-center gap-3">
+
+                                    <img
+                                        src="{{ url_for(
+                                            'static',
+                                            filename='uploads/profiles/' ~ user.profile_image
+                                        ) }}"
+                                        alt="{{ user.full_name }}"
+                                        class="rounded-circle border"
+                                        width="80"
+                                        height="80"
+                                        style="object-fit: cover;"
+                                        onerror="this.style.display='none';"
+                                    >
+
+                                    <div>
+
+                                        <div class="fw-semibold">
+                                            {{ user.full_name }}
+                                        </div>
+
+                                        <small class="text-muted">
+                                            {{ user.profile_image }}
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        {% endif %}
+
+
+                        <!-- ACTIONS -->
+
+                        <div class="border-top pt-4">
+
+                            <div class="d-flex flex-wrap gap-2">
+
+                                {{ form.submit(
+                                    class="btn btn-primary btn-lg px-4"
+                                ) }}
+
+                                <a
+                                    href="{{ url_for(
+                                        'admin.view_user',
+                                        user_id=user.id
+                                    ) }}"
+                                    class="btn btn-outline-secondary btn-lg">
+
+                                    Cancel
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
 
                     </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SIDEBAR -->
+
+        <div class="col-xl-4">
+
+
+            <!-- ACCOUNT SUMMARY -->
+
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+                <div class="card-body p-4">
+
+                    <h5 class="fw-bold mb-3">
+
+                        <i class="bi bi-person-vcard text-primary me-2"></i>
+
+                        Account Summary
+
+                    </h5>
+
+
+                    <div class="mb-3">
+
+                        <small class="text-muted d-block">
+                            Full Name
+                        </small>
+
+                        <strong>
+                            {{ user.full_name }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <small class="text-muted d-block">
+                            Email
+                        </small>
+
+                        <strong>
+                            {{ user.email }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <small class="text-muted d-block">
+                            Role
+                        </small>
+
+                        {% if user.role == "Administrator" %}
+
+                            <span class="badge bg-danger">
+                                Administrator
+                            </span>
+
+                        {% elif user.role == "interpreter" %}
+
+                            <span class="badge bg-primary">
+                                Interpreter
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge bg-secondary">
+                                Student
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div>
+
+                        <small class="text-muted d-block">
+                            Account Status
+                        </small>
+
+                        {% if user.status == "active" %}
+
+                            <span class="badge bg-success">
+                                Active
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge bg-secondary">
+                                Inactive
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- EDITING TIPS -->
+
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+                <div class="card-body p-4">
+
+                    <h5 class="fw-bold mb-3">
+
+                        <i class="bi bi-lightbulb text-warning me-2"></i>
+
+                        Editing Tips
+
+                    </h5>
+
+
+                    <ul class="small text-muted ps-3 mb-0">
+
+                        <li class="mb-3">
+                            Keep the user's email address accurate.
+                        </li>
+
+                        <li class="mb-3">
+                            Select the correct account role.
+                        </li>
+
+                        <li class="mb-3">
+                            Upload a new profile photo only when necessary.
+                        </li>
+
+                        <li>
+                            Review all information before saving.
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+
+            <!-- DANGER ZONE -->
+
+            <div class="card border-danger rounded-4">
+
+                <div class="card-body p-4">
+
+                    <h5 class="fw-bold text-danger mb-3">
+
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+
+                        Account Actions
+
+                    </h5>
+
+                    <p class="small text-muted">
+
+                        Account activation, deactivation and deletion
+                        should be performed carefully.
+
+                    </p>
+
+                    {% if user.id != current_user.id %}
+
+                    <a
+                        href="{{ url_for(
+                            'admin.delete_user',
+                            user_id=user.id
+                        ) }}"
+                        class="btn btn-outline-danger w-100">
+
+                        <i class="bi bi-trash me-1"></i>
+
+                        Delete User
+
+                    </a>
+
+                    {% else %}
+
+                    <button
+                        type="button"
+                        class="btn btn-outline-secondary w-100"
+                        disabled>
+
+                        <i class="bi bi-shield-lock me-1"></i>
+
+                        Cannot Delete Your Account
+
+                    </button>
+
+                    {% endif %}
 
                 </div>
 

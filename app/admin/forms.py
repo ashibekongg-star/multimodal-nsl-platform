@@ -1,13 +1,24 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed, FileField
+
 from wtforms import (
     StringField,
     TextAreaField,
     SelectField,
-    SubmitField
+    SubmitField,
+    PasswordField
 )
-from wtforms.validators import DataRequired, Length
 
+from wtforms.validators import (
+    DataRequired,
+    Length,
+    Email
+)
+
+
+# =====================================================
+# CATEGORY FORM
+# =====================================================
 
 class CategoryForm(FlaskForm):
 
@@ -28,8 +39,12 @@ class CategoryForm(FlaskForm):
     )
 
 
+# =====================================================
+# SIGN FORM
+# =====================================================
+
 class SignForm(FlaskForm):
-    
+
     word = StringField(
         "Word",
         validators=[
@@ -53,7 +68,9 @@ class SignForm(FlaskForm):
     category_id = SelectField(
         "Category",
         coerce=int,
-        validators=[DataRequired()]
+        validators=[
+            DataRequired()
+        ]
     )
 
     video = FileField(
@@ -79,6 +96,7 @@ class SignForm(FlaskForm):
         "Save Sign"
     )
 
+
 # =====================================================
 # USER FORM
 # =====================================================
@@ -97,7 +115,19 @@ class UserForm(FlaskForm):
         "Email Address",
         validators=[
             DataRequired(),
+            Email(),
             Length(max=120)
+        ]
+    )
+
+    password = PasswordField(
+        "Password",
+        validators=[
+            DataRequired(),
+            Length(
+                min=8,
+                max=128
+            )
         ]
     )
 
@@ -138,7 +168,5 @@ class UserForm(FlaskForm):
     )
 
     submit = SubmitField(
-        "Save Changes"
+        "Create User"
     )
-
-    
